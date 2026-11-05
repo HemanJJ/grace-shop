@@ -1067,17 +1067,17 @@
         <section id="section-stories">
             <div class="section-head">
                 <div>
-                    <h2>📖 10 大恩典生命主題牆（10 篇三明治故事全數補齊！）</h2>
-                    <p>完整對應您原本的 10 大分類（愛、饒恕、等候、盼望、平安、恩典、陪伴、感恩、重新開始、回家），點選任一故事即可在下方「左聽故事、右看同款好物」</p>
+                    <h2>📖 10 大恩典生命主題牆（支援千篇故事＆好物快篩）</h2>
+                    <p>可依「心情主題 × 好物分類」雙層篩選，或直接輸入 3 位數編號（如 <code>005</code>）、長輩痛點（如 <code>睡不著</code>、<code>苦茶油</code>）秒找故事</p>
                 </div>
-                <div style="min-width:260px;">
-                    <input type="search" id="storySearchInput" oninput="onSearchInput(this.value)" placeholder="🔍 搜尋故事、長輩稱呼或好物..." style="width:100%; padding:10px 16px; border-radius:999px; border:1.5px solid var(--border-warm); background:var(--bg-card); color:var(--text-dark); font-size:0.92rem; outline:none;">
+                <div style="min-width:290px; display:flex; gap:8px; align-items:center;">
+                    <input type="search" id="storySearchInput" oninput="onSearchInput(this.value)" placeholder="🔍 輸編號(如 005)或關鍵字(睡不著、苦茶油)..." style="width:100%; padding:10px 16px; border-radius:999px; border:1.5px solid var(--border-warm); background:var(--bg-card); color:var(--text-dark); font-size:0.92rem; outline:none;">
                 </div>
             </div>
 
-            <!-- 10 大生命主題完整選單 -->
-            <div class="category-bar" role="tablist">
-                <button class="cat-pill active" onclick="filterCategory('all', this)">🔥 全部恩典故事 (10)</button>
+            <!-- 第一層：10 大生命主題完整選單 -->
+            <div class="category-bar" role="tablist" style="margin-bottom:10px;">
+                <button class="cat-pill active" onclick="filterCategory('all', this)">🔥 全部恩典故事</button>
                 <button class="cat-pill" onclick="filterCategory('love', this)">❤️ 01. 愛</button>
                 <button class="cat-pill" onclick="filterCategory('forgiveness', this)">🤝 02. 饒恕</button>
                 <button class="cat-pill" onclick="filterCategory('waiting', this)">⏳ 03. 等候</button>
@@ -1090,19 +1090,39 @@
                 <button class="cat-pill" onclick="filterCategory('home', this)">🍲 10. 回家</button>
             </div>
 
-            <!-- 故事卡片網格 (未來有 50 篇也整齊排列) -->
+            <!-- 第二層：好物與內容型態快篩列（第 3 點：上千個產品也能 2 秒交叉過濾） -->
+            <div class="product-filter-bar" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin-bottom:20px; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border-warm); border-radius:16px;">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
+                    <span style="font-size:0.84rem; font-weight:700; color:var(--text-muted); margin-right:4px;">🎁 好物快篩：</span>
+                    <button class="prod-pill btn-a11y active" onclick="filterProductType('all', this)" style="padding:5px 12px; font-size:0.84rem;">✨ 全部類型</button>
+                    <button class="prod-pill btn-a11y" onclick="filterProductType('has_product', this)" style="padding:5px 12px; font-size:0.84rem;">🛍️ 附同款好物</button>
+                    <button class="prod-pill btn-a11y" onclick="filterProductType('coffee', this)" style="padding:5px 12px; font-size:0.84rem;">☕ 濾掛咖啡／黑芝麻飲</button>
+                    <button class="prod-pill btn-a11y" onclick="filterProductType('tea', this)" style="padding:5px 12px; font-size:0.84rem;">🍵 舒眠晚安茶／潤喉茶</button>
+                    <button class="prod-pill btn-a11y" onclick="filterProductType('health', this)" style="padding:5px 12px; font-size:0.84rem;">🌿 苦茶油／紅藜／滴雞精</button>
+                    <button class="prod-pill btn-a11y" onclick="filterProductType('pure_story', this)" style="padding:5px 12px; font-size:0.84rem;">💌 純聽生命故事</button>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span id="filterResultCount" style="font-size:0.84rem; font-weight:700; color:var(--amber);">共 10 篇</span>
+                    <button class="btn-a11y" onclick="randomStory(true)" style="padding:5px 12px; font-size:0.84rem; background:var(--amber-soft); border-color:var(--amber); color:var(--espresso);">🎲 隨機抽一杯今日故事</button>
+                </div>
+            </div>
+
+            <!-- 故事卡片網格 (未來有 1000 篇也整齊排列) -->
             <div class="story-cards-grid" id="storyCardsGrid"></div>
         </section>
 
         <!-- ==================== 4. 黃金左右雙欄：左邊三明治故事 ＋ 右邊順手帶貨 ==================== -->
         <section id="section-theater" class="theater-anchor">
-            <div class="theater-header-bar">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <span style="background:#ffd89b; color:#2c1910; font-weight:900; font-size:0.78rem; padding:3px 10px; border-radius:999px;">正在閱讀與收聽</span>
+            <div class="theater-header-bar" style="flex-wrap:wrap; gap:10px;">
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <span id="theaterCodeBadge" style="background:#ffd89b; color:#2c1910; font-weight:900; font-size:0.8rem; padding:3px 10px; border-radius:999px;">#005 正在收聽</span>
                     <span id="theaterHeaderTitle" style="font-family:var(--font-serif); font-weight:700; font-size:1.08rem;"></span>
                 </div>
-                <div style="font-size:0.84rem; color:#ebd9c5;">
-                    👈 左邊無壓力聽三明治故事 ｜ 👉 右手邊順手透過 LINE 締結＆帶走祝福
+                <!-- 第 4 點：長輩懶人收音機式導覽列（不用滑回上面找卡片，直接切換上下篇或隨機抽） -->
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                    <button type="button" onclick="prevStory(false)" style="background:rgba(255,255,255,0.16); color:#fff; border:1px solid rgba(255,255,255,0.3); padding:5px 12px; border-radius:999px; font-size:0.84rem; font-weight:700; cursor:pointer;">⏮️ 上一篇</button>
+                    <button type="button" onclick="randomStory(false)" style="background:#ffd89b; color:#2c1910; border:none; padding:5px 13px; border-radius:999px; font-size:0.84rem; font-weight:800; cursor:pointer;">🎲 隨機抽一杯故事</button>
+                    <button type="button" onclick="nextStory(false)" style="background:rgba(255,255,255,0.16); color:#fff; border:1px solid rgba(255,255,255,0.3); padding:5px 12px; border-radius:999px; font-size:0.84rem; font-weight:700; cursor:pointer;">⏭️ 下一篇</button>
                 </div>
             </div>
 
@@ -1126,7 +1146,11 @@
                                     ⬇️ 下載 MP3
                                 </a>
                             </div>
-                            <div class="audio-tools-right">
+                            <div class="audio-tools-right" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <label style="display:inline-flex; align-items:center; gap:4px; font-size:0.82rem; font-weight:700; color:var(--amber); cursor:pointer;" title="聽完本篇自動播放下一篇故事，像聽電台一樣輕鬆">
+                                    <input type="checkbox" id="autoNextToggle" checked style="accent-color:var(--amber); width:16px; height:16px; cursor:pointer;">
+                                    🔁 聽完連播下一篇
+                                </label>
                                 <label for="rateSelect" style="font-size:0.82rem; font-weight:700; color:var(--text-body);">🎙️ 語速：</label>
                                 <select id="rateSelect" class="speed-pill-select" onchange="if(isPlaying) restartTTS()">
                                     <option value="0.82">0.82x 長輩慢速</option>
@@ -1136,7 +1160,7 @@
                             </div>
                         </div>
                         <div id="ttsStatusText" style="font-size:0.82rem; color:var(--text-muted); margin-bottom:6px;">
-                            💡 點擊上方按鈕可逐段發光朗讀，或直接按下方 MP3 播放條（實體音檔 0.2 秒極速串流，絕不卡頓）：
+                            💡 點擊上方按鈕可逐段發光朗讀，或直接按下方 MP3 播放條（支援「🔁 聽完自動連播下一篇」收音機模式）：
                         </div>
                         <audio id="mp3AudioPlayer" controls preload="auto" style="width:100%; height:42px; border-radius:999px;"></audio>
                     </div>
@@ -1512,25 +1536,72 @@
         ];
 
         let activeCategory = 'all';
+        let activeProductFilter = 'all';
         let searchQuery = '';
         let currentStory = STORIES_DB[0];
         let isPlaying = false;
 
-        // ==================== 渲染故事卡片牆 ====================
-        function renderStoryCards() {
-            const grid = document.getElementById('storyCardsGrid');
-            const q = searchQuery.trim().toLowerCase();
-            const list = STORIES_DB.filter(s => {
+        function getStoryNumberStr(story) {
+            const idx = STORIES_DB.findIndex(item => item.id === story.id);
+            const num = story.sort ? parseInt(story.sort, 10) : (idx >= 0 ? idx + 1 : 1);
+            return String(isNaN(num) ? 1 : num).padStart(3, '0');
+        }
+
+        function matchProductFilter(s, filterKey) {
+            if (filterKey === 'all') return true;
+            if (filterKey === 'has_product') return !!s.hasProduct;
+            if (filterKey === 'pure_story') return !s.hasProduct;
+            if (!s.hasProduct || !s.product) return false;
+            const pText = ((s.product.tag || '') + ' ' + (s.product.title || '') + ' ' + (s.product.desc || '')).toLowerCase();
+            if (filterKey === 'coffee') return /咖啡|拿鐵|芝麻|濾掛|豆/.test(pText);
+            if (filterKey === 'tea') return /茶|洋甘菊|羅漢果|舒眠|晚安|潤喉/.test(pText);
+            if (filterKey === 'health') return /油|紅藜|雞精|核桃|杏仁|燕麥|養生|糕/.test(pText);
+            return true;
+        }
+
+        function getFilteredStories() {
+            const q = searchQuery.trim().toLowerCase().replace(/^#/, '');
+            return STORIES_DB.filter(s => {
                 if (s.status && s.status === 'draft') return false;
                 const matchCat = activeCategory === 'all' || s.categoryKey === activeCategory;
                 if (!matchCat) return false;
+                if (!matchProductFilter(s, activeProductFilter)) return false;
                 if (!q) return true;
-                const hay = [s.title, s.excerpt, s.categoryName, s.layer1, s.layer2, s.layer3, (s.product && s.product.title) || ''].join(' ').toLowerCase();
+                const codeStr = getStoryNumberStr(s);
+                const p = s.product || {};
+                const hay = [
+                    codeStr, '#' + codeStr, String(parseInt(codeStr, 10)),
+                    s.title, s.excerpt, s.categoryName, s.layer1, s.layer2, s.layer3,
+                    p.title || '', p.desc || '', p.tag || '', (p.features || []).join(' ')
+                ].join(' ').toLowerCase();
                 return hay.includes(q);
             });
+        }
+
+        // ==================== 渲染故事卡片牆 ====================
+        function renderStoryCards() {
+            const grid = document.getElementById('storyCardsGrid');
+            const list = getFilteredStories();
+            const countEl = document.getElementById('filterResultCount');
+            if (countEl) {
+                countEl.textContent = `共 ${list.length} 篇`;
+            }
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align:center; padding:36px 20px; background:var(--bg-card); border:1.5px dashed var(--border-warm); border-radius:20px;">
+                        <div style="font-size:2rem; margin-bottom:8px;">🔍</div>
+                        <h3 style="font-family:var(--font-serif); font-size:1.2rem; margin-bottom:6px;">找不到符合條件的故事或好物</h3>
+                        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:14px;">請試著輸入其他編號（如 001～010）或點下方按鈕顯示全部恩典故事</p>
+                        <button class="btn-a11y active" onclick="resetAllFilters()">✨ 顯示全部恩典故事與好物</button>
+                    </div>
+                `;
+                return;
+            }
 
             grid.innerHTML = list.map(s => {
                 const isSelected = s.id === currentStory.id;
+                const codeStr = getStoryNumberStr(s);
                 const badgeHtml = s.hasProduct
                     ? `<span class="card-status-tag status-has-shop">🎁 附同款恩典好物</span>`
                     : `<span class="card-status-tag status-pure-story">💌 純故事・LINE 締結</span>`;
@@ -1543,12 +1614,12 @@
                     <article class="story-card-item ${isSelected ? 'active-card' : ''}" onclick="jumpToStory('${s.id}', false)">
                         <div class="card-thumb-wrap">
                             <img src="${s.cover}" alt="${s.title}" loading="lazy">
-                            <span class="card-cat-tag">${s.categoryName}</span>
+                            <span class="card-cat-tag">#${codeStr} ｜ ${s.categoryName}</span>
                             ${badgeHtml}
                         </div>
                         <div class="card-content">
                             <div>
-                                <h3>${s.title}</h3>
+                                <h3><span style="color:var(--amber); font-weight:900; margin-right:4px;">#${codeStr}</span>${s.title}</h3>
                                 <p>${s.excerpt}</p>
                             </div>
                             <div class="card-bottom-meta">
@@ -1568,9 +1639,77 @@
             renderStoryCards();
         }
 
+        function filterProductType(typeKey, btnEl) {
+            activeProductFilter = typeKey;
+            document.querySelectorAll('.prod-pill').forEach(b => b.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+            renderStoryCards();
+        }
+
+        function resetAllFilters() {
+            activeCategory = 'all';
+            activeProductFilter = 'all';
+            searchQuery = '';
+            const input = document.getElementById('storySearchInput');
+            if (input) input.value = '';
+            document.querySelectorAll('.cat-pill').forEach((b, i) => b.classList.toggle('active', i === 0));
+            document.querySelectorAll('.prod-pill').forEach((b, i) => b.classList.toggle('active', i === 0));
+            renderStoryCards();
+        }
+
         function onSearchInput(val) {
             searchQuery = val || '';
             renderStoryCards();
+        }
+
+        // ==================== 第 4 點：長輩懶人收音機導覽（上一篇 / 下一篇 / 隨機抽 / 自動連播） ====================
+        function getPublishedStories() {
+            const filtered = getFilteredStories();
+            if (filtered.length > 0) return filtered;
+            return STORIES_DB.filter(s => !s.status || s.status !== 'draft');
+        }
+
+        function prevStory(autoPlayAudio) {
+            const list = getPublishedStories();
+            if (!list.length) return;
+            const idx = list.findIndex(s => s.id === currentStory.id);
+            const prevIdx = idx > 0 ? idx - 1 : list.length - 1;
+            selectStory(list[prevIdx].id);
+            showToast(`⏮️ 已切換至 #${getStoryNumberStr(currentStory)}〈${currentStory.title}〉`);
+            if (autoPlayAudio) playCurrentStoryAudio();
+        }
+
+        function nextStory(autoPlayAudio) {
+            const list = getPublishedStories();
+            if (!list.length) return;
+            const idx = list.findIndex(s => s.id === currentStory.id);
+            const nextIdx = (idx >= 0 && idx < list.length - 1) ? idx + 1 : 0;
+            selectStory(list[nextIdx].id);
+            showToast(`⏭️ 已切換至 #${getStoryNumberStr(currentStory)}〈${currentStory.title}〉`);
+            if (autoPlayAudio) playCurrentStoryAudio();
+        }
+
+        function randomStory(scrollToTheater) {
+            const list = STORIES_DB.filter(s => !s.status || s.status !== 'draft');
+            if (!list.length) return;
+            const candidates = list.length > 1 ? list.filter(s => s.id !== currentStory.id) : list;
+            const pick = candidates[Math.floor(Math.random() * candidates.length)];
+            selectStory(pick.id);
+            if (scrollToTheater) {
+                document.getElementById('section-theater').scrollIntoView({ behavior: 'smooth' });
+            }
+            showToast(`🎲 為您抽中今日恩典故事：#${getStoryNumberStr(currentStory)}〈${currentStory.title}〉`);
+        }
+
+        function playCurrentStoryAudio() {
+            const audioEl = document.getElementById('mp3AudioPlayer');
+            if (audioEl && currentStory.mp3File) {
+                audioEl.play().catch(() => {
+                    startTTS();
+                });
+            } else {
+                startTTS();
+            }
         }
 
         // ==================== 載入故事到下方「左故事、右帶貨」閱讀廳 ====================
@@ -1584,8 +1723,11 @@
                 window.history.replaceState({}, '', u.toString());
             }
 
+            const codeStr = getStoryNumberStr(currentStory);
+            const codeBadge = document.getElementById('theaterCodeBadge');
+            if (codeBadge) codeBadge.textContent = `#${codeStr} 正在收聽`;
             document.getElementById('theaterHeaderTitle').textContent = currentStory.title;
-            document.getElementById('readerCategoryBadge').textContent = currentStory.categoryName;
+            document.getElementById('readerCategoryBadge').textContent = `#${codeStr} ｜ ${currentStory.categoryName}`;
             document.getElementById('readerMainTitle').textContent = currentStory.title;
             document.getElementById('textLayer1').textContent = currentStory.layer1;
             document.getElementById('textLayer2').textContent = currentStory.layer2;
@@ -1735,8 +1877,19 @@
             let idx = 0;
 
             function speakNext() {
-                if (!isPlaying || idx >= segments.length) {
+                if (!isPlaying) {
                     stopTTS();
+                    return;
+                }
+                if (idx >= segments.length) {
+                    stopTTS();
+                    const autoChk = document.getElementById('autoNextToggle');
+                    if (autoChk && autoChk.checked) {
+                        setTimeout(() => {
+                            nextStory(false);
+                            startTTS();
+                        }, 1200);
+                    }
                     return;
                 }
                 const seg = segments[idx];
@@ -2078,6 +2231,15 @@
         window.addEventListener('DOMContentLoaded', () => {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.getVoices();
+            }
+            const audioEl = document.getElementById('mp3AudioPlayer');
+            if (audioEl) {
+                audioEl.addEventListener('ended', () => {
+                    const autoChk = document.getElementById('autoNextToggle');
+                    if (autoChk && autoChk.checked) {
+                        nextStory(true);
+                    }
+                });
             }
             loadComments();
             const params = new URLSearchParams(window.location.search);
