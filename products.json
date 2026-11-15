@@ -1,0 +1,226 @@
+[
+  {
+    "id": "P001",
+    "storyIds": [
+      "couple-love"
+    ],
+    "category": "咖啡飲品",
+    "tag": "❤️ 銀髮夫妻晨間對飲・結婚紀念首選",
+    "title": "【相守五十載】無糖高鈣黑芝麻粉＋半低因故事濾掛咖啡雙人禮盒",
+    "price": "NT$ 880 / 組（含黑芝麻粉 1 罐＋故事濾掛 10 包＋雙人祝福卡）",
+    "priceNum": 880,
+    "unit": "組",
+    "img": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80",
+    "desc": "把黑芝麻粉加入熱牛奶與半低因咖啡中，化作長輩每天早晨最香醇營養的「黑芝麻拿鐵」，補鈣又暖心。",
+    "features": [
+      "100% 台灣契作黑芝麻低溫慢焙，細緻好溶解不卡喉",
+      "搭配低酸度半低因濾掛咖啡，溫順不心悸",
+      "隨盒附贈「夫妻相守恩典有聲故事卡」"
+    ],
+    "active": true,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P002",
+    "storyIds": [
+      "reconcile-forgiveness"
+    ],
+    "category": "其他好物",
+    "tag": "🎁 客製化親口錄音・把愛說出口",
+    "title": "【破冰與和解】親口錄音客製化 10×12cm 故事濾掛咖啡禮盒（10包入）",
+    "price": "NT$ 590 / 盒（含代轉製 60 秒家人語音 QR Code）",
+    "priceNum": 590,
+    "unit": "盒",
+    "img": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+    "desc": "把說不出口的道歉、感謝與叮嚀錄進咖啡包裡，讓收禮的家人手機一掃就聽見您的聲音。",
+    "features": [
+      "支援手機 LINE 語音直接轉製專屬 QR Code",
+      "10×12cm 溫暖手繪風外袋小量印製",
+      "溫和中深焙堅果可可風味，長輩與年輕人都愛喝"
+    ],
+    "active": false,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P003",
+    "storyIds": [
+      "icu-waiting"
+    ],
+    "category": "茶飲",
+    "tag": "🌙 100% 零咖啡因・銀髮夜間舒眠首選",
+    "title": "【靜候黎明】南非國寶博士茶＋黃金洋甘菊晚安舒眠茶禮盒（20包入）",
+    "price": "NT$ 460 / 盒（買 2 盒送大字版睡前平安經文卡）",
+    "priceNum": 460,
+    "unit": "盒",
+    "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80",
+    "desc": "嚴選南非頂級發酵紅灌木茶（Rooibos）搭配天然洋甘菊，完全不含咖啡因與草酸，睡前飲用溫潤安神、不傷胃。",
+    "features": [
+      "零咖啡因、低單寧酸，失眠或自律神經緊繃長輩最適合",
+      "每包皆附有聲經文 QR Code，邊喝邊聽睡前祝福禱告",
+      "醫院探訪、關懷憂慮長輩最貼心的平安伴手禮"
+    ],
+    "active": true,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P004",
+    "storyIds": [
+      "choir-hope"
+    ],
+    "category": "其他好物",
+    "tag": "🎵 長青詩班／講員牧者潤喉最愛",
+    "title": "【詩班奶奶的潤喉恩典】古法無糖羅漢果菊花潤喉茶禮盒（15入）",
+    "price": "NT$ 450 / 盒（詩班團購 5 盒 NT$ 1,980）",
+    "priceNum": 450,
+    "unit": "盒",
+    "img": "https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=800&q=80",
+    "desc": "專為愛唱詩歌、常講話分享見證的長輩調配，溫潤回甘、生津止渴，無咖啡因全天可飲。",
+    "features": [
+      "天然羅漢果與台灣杭菊慢火烘焙，零熱量、無人工甜味劑",
+      "獨立三角立體茶包，熱水沖泡 3 分鐘即享甘甜",
+      "隨盒附贈王奶奶《奇異恩典》有聲故事祝福卡"
+    ],
+    "active": false,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P005",
+    "storyIds": [
+      "pastor-peace"
+    ],
+    "category": "咖啡飲品",
+    "tag": "🎁 探訪病患／長輩晨更首選（10×12cm 專屬故事外袋）",
+    "title": "【牧者的晨更陪伴】有聲故事半低因濾掛咖啡＋晚安博士茶禮盒",
+    "price": "NT$ 490 / 盒（10包入｜教會團購 5 盒 NT$ 2,200）",
+    "priceNum": 490,
+    "unit": "盒",
+    "img": "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80",
+    "desc": "早上一包溫和不傷胃的半低因精品濾掛、晚上一包零咖啡因南非國寶博士茶。每包皆印有大字經文與林牧師有聲故事 QR Code。",
+    "features": [
+      "銀髮族友善：低酸度、不心悸、不影響夜晚睡眠",
+      "每包外袋獨立印製 10×12cm 溫暖插畫與大字金句",
+      "手機掃碼即可聽見 95 秒林牧師故事與祝福禱告",
+      "附贈「主內探訪手寫祝福小卡」，小組探訪送禮最體面"
+    ],
+    "active": true,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P006",
+    "storyIds": [
+      "farmer-grace"
+    ],
+    "category": "油品",
+    "tag": "🌿 主內小農契作（零摻假・第一道低溫鮮榨）",
+    "title": "【土地的恩典】部落長老冷壓初榨苦茶油 500ml（附有聲見證吊牌）",
+    "price": "NT$ 1,280 / 瓶（孝親雙瓶禮盒組 NT$ 2,380 免運）",
+    "priceNum": 1280,
+    "unit": "瓶",
+    "img": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80",
+    "desc": "100% 台灣高山苦茶籽第一道冷壓初榨，富含單元不飽和脂肪酸（Omega-9）。適合長輩晨起空腹保養、拌麵線或溫和料理。",
+    "features": [
+      "主內張長老果園契作，無除草劑、人工採收日曬",
+      "低溫鮮榨保留完整營養，清香回甘、絕無刺鼻油耗味",
+      "瓶身附「張長老山林見證有聲故事卡」與晨起飲用量杯",
+      "每售出一瓶即提撥 5% 支持偏鄉部落教會長青供餐"
+    ],
+    "active": true,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P007",
+    "storyIds": [
+      "visit-companionship"
+    ],
+    "category": "其他好物",
+    "tag": "🙏 教會小組探訪／醫院關懷必備伴手禮",
+    "title": "【溫暖敲門】溫潤橄欖木口袋十字架握件＋5包有聲故事茶／咖啡禮袋",
+    "price": "NT$ 390 / 組（教會關懷部團購 10 組 NT$ 3,500）",
+    "priceNum": 390,
+    "unit": "組",
+    "img": "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80",
+    "desc": "專為長輩手掌弧度打磨的圓潤木質十字架握件，夜裡睡不著或緊張時握在手心禱告極具安全感，搭配 5 包有聲故事茶與咖啡。",
+    "features": [
+      "天然實木圓角打磨，溫潤親膚、長輩放口袋隨身攜帶",
+      "內含 3 包無咖啡因博士茶＋2 包溫和低因故事濾掛",
+      "附大字版「主內代禱祝福卡」，探訪送禮輕巧無負擔"
+    ],
+    "active": false,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P008",
+    "storyIds": [
+      "harvest-gratitude"
+    ],
+    "category": "穀物",
+    "tag": "🌾 銀髮控糖高纖主食・營養師推薦",
+    "title": "【豐收的感恩】台灣高山脫殼紅藜麥 600g＋無加糖綜合堅果穀粉禮盒",
+    "price": "NT$ 790 / 組（含脫殼免洗紅藜 2 包＋無糖堅果飲 1 罐）",
+    "priceNum": 790,
+    "unit": "組",
+    "img": "https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&w=800&q=80",
+    "desc": "膳食纖維是地瓜的 7 倍、鈣質是牛奶的 5 倍！已脫殼處理不苦澀，與米飯同煮軟Q好吞嚥，是銀髮長輩最棒的日常主食升級。",
+    "features": [
+      "部落教會小農無農藥栽種，通過多重農藥殘留檢驗",
+      "免浸泡：洗米時直接加入 1/5 比例紅藜即可一起蒸煮",
+      "隨盒附贈「長輩控糖美味三餐食譜」與許長老有聲見證卡"
+    ],
+    "active": true,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P009",
+    "storyIds": [
+      "active-restart"
+    ],
+    "category": "保健輔具",
+    "tag": "🦵 物理治療師弟兄推薦・長青團契揪團熱銷",
+    "title": "【健步如飛去聚會】石墨烯遠紅外線保暖護膝＋低溫無糖高鈣黑芝麻糊組",
+    "price": "NT$ 1,180 / 組（保暖護膝 1 雙＋高鈣黑芝麻粉 2 罐）",
+    "priceNum": 1180,
+    "unit": "組",
+    "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+    "desc": "外穿保暖護關節、內補高鈣好吸收！專為台灣濕冷氣候與銀髮族退化關節設計的「內外雙護」恩典組合。",
+    "features": [
+      "親膚蓄熱護膝：3D 立體編織不勒腿肚、久坐不捲邊",
+      "100% 純黑芝麻低溫慢焙：細緻分子不卡喉、無加糖超香濃",
+      "隨箱附贈「周伯伯椅子抬腿 3 分鐘護膝操」大字圖解",
+      "最適合買給膝蓋怕冷、上下樓梯吃力的父母或自己保養"
+    ],
+    "active": true,
+    "cost": null,
+    "boxQty": null
+  },
+  {
+    "id": "P010",
+    "storyIds": [
+      "mama-home"
+    ],
+    "category": "補養",
+    "tag": "💝 基督徒兒女孝親／探病補養冠軍",
+    "title": "【媽媽的禱告湯】常溫慢熬紅羽土雞滴雞精禮盒（10包入＋有聲孝親卡）",
+    "price": "NT$ 1,580 / 盒（免費代寫孝親祝福小卡）",
+    "priceNum": 1580,
+    "unit": "盒",
+    "img": "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80",
+    "desc": "嚴選產銷履歷紅羽土雞，10 小時古法慢滴不加一滴水，濾油零膽固醇。常溫保存免佔冰箱，長輩隔水加熱 3 分鐘即飲。",
+    "features": [
+      "銀髮牙口與腸胃友善：小分子胺基酸豐富，早起一包提振精神",
+      "安全免顧火：直接把鋁箔袋放進熱水杯浸泡 3 分鐘即可飲用",
+      "隨盒附贈【陳媽媽有聲見證故事卡】＋兒女署名祝福",
+      "住院探訪、術後調養、母親節／父親節／重陽節最暖心禮物"
+    ],
+    "active": true,
+    "cost": null,
+    "boxQty": null
+  }
+]

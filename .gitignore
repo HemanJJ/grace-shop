@@ -1,4 +1,26 @@
+# 本機專屬後台與機密腳本（留在 Mac 本機 Private，絕不推上公開 GitHub）
+admin_cms.py
+*.command
+HANDOFF.md
+netlify.toml
+
+# 系統與 Python 快取
 __pycache__/
 *.py[cod]
 .DS_Store
 *.log
+
+# Local Netlify folder
+.netlify
+
+# 收單 API（本機測試與狀態，不上傳）
+order-api/.home/
+order-api/.wrangler-home/
+order-api/.wrangler/
+order-api/.dev.vars
+
+# 部署產物（含 mp3，太大，不進版控）
+dist/
+
+# 看單密碼（跟密碼一樣，不能進版控）
+order-api/看單密碼.txt

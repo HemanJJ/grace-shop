@@ -1,0 +1,9 @@
+{
+  "_note": "量價階梯：同一個商品自己湊到件數才打折，不同商品不併計算（成本不同，併起來會賠）。percent 90 = 9 折。product_id 用 * 表示全部商品。",
+  "updated": "2026-11-15",
+  "tiers": [
+    { "product_id": "*", "min_qty": 50, "percent": 90 },
+    { "product_id": "*", "min_qty": 100, "percent": 80 },
+    { "product_id": "*", "min_qty": 200, "percent": 70 }
+  ]
+}

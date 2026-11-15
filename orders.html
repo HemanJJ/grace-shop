@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>收單看板 ｜ 光碼電台</title>
+<style>
+  :root { --ink:#2b2118; --muted:#8a7c6d; --line:#e6ddd2; --card:#fffdf9; --accent:#8a5a2b; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; font:16px/1.6 -apple-system,"PingFang TC","Noto Sans TC",sans-serif; background:#f6f1e9; color:var(--ink); }
+  h1 { font-size:20px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:14px; }
+  .bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  input, button { font:inherit; padding:8px 12px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+  button { background:var(--accent); color:#fff; border-color:var(--accent); cursor:pointer; }
+  .cards { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); margin-bottom:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .card b { display:block; font-size:22px; }
+  .card span { color:var(--muted); font-size:13px; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  th, td { padding:8px 10px; text-align:left; border-bottom:1px solid var(--line); font-size:14px; vertical-align:top; }
+  th { background:#f1e8db; font-weight:700; }
+  tr:last-child td { border-bottom:0; }
+  .muted { color:var(--muted); font-size:13px; }
+  .sec { margin:18px 0 8px; font-weight:700; }
+  .err { color:#a3311d; }
+  @media (max-width:520px) { th.hide, td.hide { display:none; } }
+</style>
+</head>
+<body>
+  <h1>收單看板</h1>
+  <div class="sub">光碼電台・好物訂單（每一筆都是從網站結帳進來的）</div>
+
+  <div class="bar">
+    <input id="date" type="date">
+    <input id="token" type="password" placeholder="看單密碼" style="min-width:140px">
+    <button id="go">看今天的單</button>
+  </div>
+
+  <div id="out" class="muted">輸入密碼後按「看今天的單」。</div>
+
+<script>
+const API = 'https://grace-order-api.difly.workers.dev';
+const $ = (id) => document.getElementById(id);
+const money = (n) => 'NT$' + Number(n || 0).toLocaleString('zh-TW');
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+const saved = localStorage.getItem('grace_admin_token');
+if (saved) $('token').value = saved;
+
+$('date').value = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
+$('go').onclick = load;
+
+async function load() {
+  const token = $('token').value.trim();
+  const date = $('date').value;
+  if (!token) { $('out').innerHTML = '<span class="err">要先填看單密碼。</span>'; return; }
+  localStorage.setItem('grace_admin_token', token);
+  $('out').textContent = '載入中…';
+  try {
+    const res = await fetch(`${API}/api/orders?token=${encodeURIComponent(token)}&date=${encodeURIComponent(date)}`);
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.message || data.error || '讀不到');
+    render(data);
+  } catch (e) {
+    $('out').innerHTML = '<span class="err">' + esc(e.message) + '</span>（密碼錯或網路不通）';
+  }
+}
+
+function render(d) {
+  const t = d.totals || {};
+  const cards = `
+    <div class="cards">
+      <div class="card"><b>${d.count}</b><span>筆訂單</span></div>
+      <div class="card"><b>${money(t.revenue)}</b><span>今天收到（含運費）</span></div>
+      <div class="card"><b>${money(t.discount)}</b><span>階梯折扣</span></div>
+      <div class="card"><b>${t.pieces || 0}</b><span>件數</span></div>
+      <div class="card"><b>${money(t.profit)}</b><span>毛利（進價未填則不準）</span></div>
+    </div>`;
+
+  const need = (d.need || []).length
+    ? `<div class="sec">叫貨清單（今天各商品總件數）</div>
+       <table><tr><th>商品</th><th>件數</th></tr>
+       ${d.need.map((n) => `<tr><td>${esc(n.name)}</td><td>${n.qty}</td></tr>`).join('')}</table>`
+    : '';
+
+  const rows = (d.orders || []).map((o) => `
+    <tr>
+      <td>${esc(o.id)}<div class="muted">${esc((o.created_at || '').slice(11, 16))}</div></td>
+      <td class="hide">${esc(o.buyer_name || '')}${o.buyer_phone ? '<div class="muted">' + esc(o.buyer_phone) + '</div>' : ''}</td>
+      <td>${(o.items || []).map((i) => `${esc(i.name.slice(0, 16))}… ×${i.qty}${i.tier_percent ? '（' + i.tier_percent / 10 + '折）' : ''}`).join('<br>')}</td>
+      <td>${o.discount ? '<div class="muted">折扣 −' + money(o.discount) + '</div>' : ''}${money(o.total)}</td>
+    </tr>`).join('');
+
+  $('out').innerHTML = cards +
+    (d.count ? `<table><tr><th>訂單</th><th class="hide">客人</th><th>內容</th><th>金額</th></tr>${rows}</table>` : '<div class="muted">這天沒有訂單。</div>') +
+    need;
+}
+</script>
+</body>
+</html>

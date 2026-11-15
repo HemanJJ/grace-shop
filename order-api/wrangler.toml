@@ -1,0 +1,13 @@
+name = "grace-order-api"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+# 收單資料庫（Cloudflare D1，免費方案 5GB）
+[[d1_databases]]
+binding = "DB"
+database_name = "grace-shop"
+database_id = "cbf147b1-d1e2-4eae-84fa-099ba3097fcc"
+
+[vars]
+# 看訂單用的密碼不寫在這裡，用指令設定：
+#   cd order-api && wrangler secret put ADMIN_TOKEN
