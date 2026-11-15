@@ -10,6 +10,8 @@
  */
 
 const SHIP_FEE = 80;        // 運費 80 元
+const MAX_UPLOAD = 900000;  // 上架單圖片上限 900KB（前端已先縮圖）
+const SHEET_KEY = 'gs-sheet-2026'; // 上架單專用（公開但不寫在明顯處，擋掉隨手亂傳）
 const FREE_SHIP_OVER = 1000; // 滿 1000 免運
 
 const ALLOWED_ORIGINS = [
@@ -33,7 +35,7 @@ function corsHeaders(req) {
   return {
     'Access-Control-Allow-Origin': allow,
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Sheet-Key',
     'Access-Control-Max-Age': '86400',
     'Vary': 'Origin',
   };
@@ -276,6 +278,48 @@ async function syncCatalog(req, env, url, cors) {
   return json({ ok: true, products: ids.length, tiers: tierCount, at: now }, cors);
 }
 
+function b64ToBytes(b64) {
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+/** 上架單傳圖：前端先縮到 1200px、壓成 JPEG，這裡只收 dataURL */
+async function uploadImage(req, env, origin, cors) {
+  if (req.headers.get('X-Sheet-Key') !== SHEET_KEY) {
+    throw new HttpError(401, 'unauthorized', '上架單金鑰不對');
+  }
+  const body = await req.json().catch(() => { throw new HttpError(400, 'bad_json'); });
+  const m = /^data:(image\/(png|jpeg|webp));base64,([A-Za-z0-9+/=\s]+)$/.exec(String(body.data || ''));
+  if (!m) throw new HttpError(400, 'bad_image', '只收 png / jpeg / webp');
+
+  const bytes = b64ToBytes(m[3].replace(/\s/g, ''));
+  if (!bytes.length) throw new HttpError(400, 'empty_image', '圖是空的');
+  if (bytes.length > MAX_UPLOAD) {
+    throw new HttpError(413, 'too_large', `圖片 ${Math.round(bytes.length / 1024)}KB 超過 900KB，請再縮小`);
+  }
+
+  const id = 'img_' + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
+  await env.DB.prepare('INSERT INTO uploads (id, mime, bytes, created_at, data) VALUES (?,?,?,?,?)')
+    .bind(id, m[1], bytes.length, taipeiParts().iso, bytes).run();
+
+  return json({ ok: true, url: `${origin}/api/img/${id}`, bytes: bytes.length }, cors);
+}
+
+async function serveImage(id, env) {
+  const row = await env.DB.prepare('SELECT mime, data FROM uploads WHERE id = ?').bind(id).first();
+  if (!row) return new Response('not found', { status: 404 });
+  const buf = row.data instanceof ArrayBuffer ? row.data : new Uint8Array(row.data);
+  return new Response(buf, {
+    headers: {
+      'Content-Type': row.mime || 'application/octet-stream',
+      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -287,6 +331,10 @@ export default {
       if (url.pathname === '/api/orders' && req.method === 'POST') return await createOrder(req, env, cors);
       if (url.pathname === '/api/orders' && req.method === 'GET') return await listOrders(req, env, url, cors);
       if (url.pathname === '/api/admin/sync' && req.method === 'POST') return await syncCatalog(req, env, url, cors);
+      if (url.pathname === '/api/upload' && req.method === 'POST') return await uploadImage(req, env, url.origin, cors);
+      if (url.pathname.startsWith('/api/img/') && req.method === 'GET') {
+        return await serveImage(url.pathname.slice('/api/img/'.length), env);
+      }
       return json({ ok: false, error: 'not_found' }, cors, 404);
     } catch (e) {
       if (e instanceof HttpError) {

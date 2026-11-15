@@ -61,3 +61,12 @@ CREATE TABLE order_items (
 CREATE INDEX idx_tiers ON price_tiers (product_id, min_qty);
 CREATE INDEX idx_orders_created ON orders (created_at);
 CREATE INDEX idx_items_order ON order_items (order_id);
+
+-- ⑤ 上架單上傳的圖片（縮圖後存放，給商品卡用）
+CREATE TABLE IF NOT EXISTS uploads (
+  id         TEXT PRIMARY KEY,
+  mime       TEXT NOT NULL,
+  bytes      INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  data       BLOB NOT NULL
+);

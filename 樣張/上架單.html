@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>上架單 ｜ 貼給小李就好</title>
+<style>
+  :root { --ink:#2b2118; --muted:#8a7c6d; --line:#e6ddd2; --accent:#8a5a2b; --ok:#2f6b45; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:24px 16px 60px; font:16px/1.7 -apple-system,"PingFang TC","Noto Sans TC",sans-serif; background:#f6f1e9; color:var(--ink); }
+  main { max-width:640px; margin:0 auto; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .lead { color:var(--muted); font-size:14px; margin-bottom:20px; }
+  label { display:block; font-weight:700; font-size:14px; margin:16px 0 6px; }
+  label span { font-weight:400; color:var(--muted); }
+  input, textarea { width:100%; font:inherit; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:#fffdf9; }
+  textarea { min-height:92px; resize:vertical; }
+  .two { display:grid; gap:12px; grid-template-columns:1fr 1fr; }
+  @media (max-width:520px) { .two { grid-template-columns:1fr; } }
+  .bar { display:flex; gap:10px; margin-top:22px; flex-wrap:wrap; }
+  button { font:inherit; padding:10px 18px; border-radius:10px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
+  button.ghost { background:#fffdf9; color:var(--accent); }
+  pre { white-space:pre-wrap; background:#fffdf9; border:1px solid var(--line); border-radius:12px; padding:14px 16px; font:15px/1.8 -apple-system,"PingFang TC","Noto Sans TC",sans-serif; margin:0; }
+  .hint { font-size:13px; color:var(--muted); margin-top:8px; }
+  .ok { color:var(--ok); font-weight:700; }
+</style>
+</head>
+<body>
+<main>
+  <h1>上架單</h1>
+  <p class="lead">填完按「複製」，貼到對話裡給小李。不用寫得漂亮，講清楚就好。</p>
+
+  <label>商品 <span>（舊的填編號 P003；新的直接寫名字）</span></label>
+  <input id="pid" placeholder="P003 或 新商品名">
+
+  <label>三句賣點 <span>（一行一句，講事實：成分、規格、怎麼用）</span></label>
+  <textarea id="points" placeholder="一盒 20 包，一包一杯&#10;零咖啡因，成分只有兩樣&#10;每包有 QR，掃了會唸一段祝福"></textarea>
+
+  <div class="two">
+    <div>
+      <label>售價 <span>（元）</span></label>
+      <input id="price" type="number" placeholder="460">
+    </div>
+    <div>
+      <label>進價 <span>（元，可先空白）</span></label>
+      <input id="cost" type="number" placeholder="280">
+    </div>
+  </div>
+
+  <label>商品圖片 <span>（選一張，貼對話時把圖一起傳給我就好）</span></label>
+  <input id="imgfile" type="file" accept="image/*">
+  <div id="imgprev" style="margin-top:8px"></div>
+
+  <label>階梯／截止 <span>（沒填就沿用 50/100/200 → 9/8/7 折）</span></label>
+  <input id="tier" placeholder="50→9折、100→8折；10/22 20:00 截止">
+
+  <div class="bar">
+    <button id="copy">📋 複製，貼給小李</button>
+    <button class="ghost" id="clear">清空</button>
+  </div>
+  <p class="hint" id="status"></p>
+
+  <label style="margin-top:26px">會變成這樣</label>
+  <pre id="out"></pre>
+  <p class="hint">小李會回你：上線網址、看板連結、一篇可以直接貼群的開團貼文。</p>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const F = ['pid', 'points', 'price', 'cost', 'tier'];
+
+function build() {
+  const pid = $('pid').value.trim();
+  const points = $('points').value.split('\n').map((s) => s.trim()).filter(Boolean);
+  const price = $('price').value.trim();
+  const cost = $('cost').value.trim();
+  const tier = $('tier').value.trim();
+
+  const lines = [];
+  lines.push('商品：' + (pid || '（待填）'));
+  if (points.length) {
+    lines.push('三句賣點：');
+    points.forEach((p) => lines.push('・' + p));
+  } else {
+    lines.push('三句賣點：（待填）');
+  }
+  lines.push('售價：' + (price || '（待填）'));
+  lines.push('進價：' + (cost || '（先不填）'));
+  lines.push('階梯／截止：' + (tier || '（沿用 50/100/200 → 9/8/7 折）'));
+  lines.push('圖片：' + (IMG_URL ? IMG_URL : (IMG_NAME ? '（' + IMG_NAME + ' 上傳沒成功，請把圖直接貼對話）' : '（待附）')));
+  return lines.join('\n');
+}
+
+let IMG_NAME = '';
+let IMG_URL = '';
+
+const API = 'https://grace-order-api.difly.workers.dev';
+const SHEET_KEY = 'gs-sheet-2026';
+
+function loadBitmap(file) {
+  if (window.createImageBitmap) return createImageBitmap(file);
+  return new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = () => rej(new Error('讀不到這張圖'));
+    i.src = URL.createObjectURL(file);
+  });
+}
+
+function shrink(file) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const bmp = await loadBitmap(file);
+      const max = 1200;
+      const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
+      const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(bmp, 0, 0, w, h);
+      c.toBlob((blob) => blob ? resolve(blob) : reject(new Error('壓縮失敗')), 'image/jpeg', 0.82);
+    } catch (e) { reject(e); }
+  });
+}
+
+function toDataURL(blob) {
+  return new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(blob); });
+}
+
+$('imgfile').addEventListener('change', async (e) => {
+  const f = e.target.files && e.target.files[0];
+  IMG_NAME = f ? f.name : '';
+  IMG_URL = '';
+  const box = $('imgprev');
+  box.innerHTML = '';
+  if (!f) { render(); return; }
+
+  const img = document.createElement('img');
+  img.src = URL.createObjectURL(f);
+  img.style.cssText = 'max-width:180px;border-radius:10px;border:1px solid #e6ddd2';
+  box.appendChild(img);
+  $('status').textContent = '圖片上傳中…';
+  render();
+
+  try {
+    const blob = await shrink(f);
+    const data = await toDataURL(blob);
+    const r = await fetch(API + '/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Sheet-Key': SHEET_KEY },
+      body: JSON.stringify({ data }),
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.message || d.error || '上傳失敗');
+    IMG_URL = d.url;
+    img.src = d.url;
+    $('status').textContent = '✅ 圖已上傳（' + Math.round(d.bytes / 1024) + ' KB）';
+  } catch (err) {
+    $('status').textContent = '⚠️ 圖沒上傳成功：' + err.message + '（可以直接把圖貼進對話）';
+  }
+  render();
+});
+
+function render() { $('out').textContent = build(); }
+
+F.forEach((id) => $(id).addEventListener('input', render));
+
+$('copy').onclick = async () => {
+  const text = build();
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      $('status').textContent = '✅ 已複製，貼到對話就好。';
+      return;
+    }
+    throw new Error('no clipboard api');
+  } catch (e) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+      $('status').textContent = '✅ 已複製（備援方式）。';
+    } catch (e2) {
+      $('status').textContent = '⚠️ 瀏覽器不給複製，直接選下面那段文字比較快。';
+    }
+  }
+};
+
+$('clear').onclick = () => {
+  F.forEach((id) => $(id).value = '');
+  IMG_NAME = ''; IMG_URL = ''; $('imgprev').innerHTML = ''; $('imgfile').value = '';
+  $('status').textContent = '';
+  render();
+};
+
+render();
+</script>
+</body>
+</html>
