@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>歲月恩典館・後台</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#14110d;color:#f3ead9;font-family:"PingFang TC","Noto Sans TC",system-ui,sans-serif;
+       display:flex;flex-direction:column;height:100vh}
+  header{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid #3a3022;flex-wrap:wrap}
+  h1{font-size:1rem;margin:0}
+  .tabs{display:flex;gap:8px;margin-left:auto}
+  .tab{background:#241d15;border:1px solid #3a3022;color:#d8c8a8;border-radius:9px;padding:8px 14px;
+       font-size:.86rem;cursor:pointer;font-weight:700}
+  .tab.on{background:#c9a227;color:#231a09;border-color:#c9a227}
+  main{flex:1;display:flex;min-height:0}
+  .list{width:340px;border-right:1px solid #3a3022;overflow:auto;padding:10px}
+  .item{padding:10px 12px;border:1px solid #2c2519;border-radius:9px;margin-bottom:8px;cursor:pointer;background:#1a1510}
+  .item:hover{border-color:#c9a227}
+  .item.on{border-color:#c9a227;background:#241d15}
+  .item b{display:block;font-size:.86rem;font-weight:700;line-height:1.4}
+  .item span{font-size:.74rem;color:#9c8a72}
+  .pane{flex:1;overflow:auto;padding:18px 22px}
+  label{display:block;font-size:.78rem;color:#c8b48f;margin:12px 0 5px;font-weight:700}
+  input,textarea,select{width:100%;background:#0f0c09;border:1px solid #3a3022;color:#f3ead9;border-radius:8px;
+       padding:9px 11px;font-size:.9rem;font-family:inherit}
+  textarea{min-height:80px;line-height:1.7;resize:vertical}
+  .row{display:flex;gap:10px}.row>*{flex:1}
+  button{background:#c9a227;color:#231a09;border:0;border-radius:9px;padding:11px 18px;font-weight:800;cursor:pointer;
+       font-family:inherit;font-size:.9rem}
+  button.ghost{background:#2b241a;color:#e8d7b4;border:1px solid #4a3d2a}
+  button.danger{background:#5a2626;color:#f3c9c9}
+  .bar{display:flex;gap:10px;margin-top:18px;align-items:center;flex-wrap:wrap}
+  .hint{font-size:.76rem;color:#8d7c62;line-height:1.7}
+  #log{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:.78rem;background:#0c0a08;
+       border:1px solid #2c2519;border-radius:8px;padding:12px;max-height:340px;overflow:auto;margin-top:12px}
+  .toast{position:fixed;right:18px;bottom:18px;background:#2f7a52;color:#fff;padding:12px 18px;border-radius:10px;
+       font-size:.9rem;opacity:0;transition:.25s}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <h1>🧾 歲月恩典館・後台</h1>
+  <span class="hint" id="who"></span>
+  <div class="tabs">
+    <button class="tab on" data-tab="story">故事</button>
+    <button class="tab" data-tab="product">商品</button>
+    <button class="tab" data-tab="publish">發布</button>
+  </div>
+</header>
+
+<main>
+  <div class="list" id="list"></div>
+  <div class="pane" id="pane"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+let DATA = { stories: [], products: [] };
+let TAB = "story";
+let CUR = null;
+
+const STORY_FIELDS = [
+  ["id","代號（英文，不能重複）","text"],
+  ["sort","排序（數字）","number"],
+  ["categoryName","分類名稱","text"],
+  ["title","標題","textarea"],
+  ["excerpt","摘要（電台卡上那兩行）","textarea"],
+  ["mp3File","音檔路徑（./mp3/ep01.mp3）","text"],
+  ["cover","封面圖網址或 ./images/xxx.jpg","text"],
+  ["layer1","故事第一段","textarea"],
+  ["layer2","故事第二段","textarea"],
+  ["layer3","故事第三段","textarea"],
+  ["scripture","經文／結語","textarea"],
+  ["status","狀態（published / draft）","text"],
+  ["productIds","掛的商品（逗號分隔 P001,P002）","text"],
+];
+
+const PRODUCT_FIELDS = [
+  ["id","商品代號（P001）","text"],
+  ["category","分類","text"],
+  ["title","商品名稱","textarea"],
+  ["tag","一句話標籤","text"],
+  ["price","價格文字（NT$ 880 / 組…）","text"],
+  ["priceNum","價格數字","number"],
+  ["unit","單位（組／包）","text"],
+  ["img","圖片網址","text"],
+  ["desc","說明","textarea"],
+  ["features","特點（一行一點）","textarea"],
+  ["storyIds","掛的故事（逗號分隔）","text"],
+  ["active","上架中（true / false）","text"],
+];
+
+function esc(s){ return String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove("show"), 1800);
+}
+
+async function load(){
+  const r = await fetch("/api/data");
+  DATA = await r.json();
+  $("#who").textContent = "資料：" + DATA.stories.length + " 篇故事、" + DATA.products.length + " 件商品";
+  renderList();
+}
+
+function rowsOf(){
+  return TAB === "story" ? DATA.stories : TAB === "product" ? DATA.products : [];
+}
+
+function renderList(){
+  const box = $("#list");
+  if (TAB === "publish"){ box.innerHTML = `<div class="hint">按右邊的按鈕，把現在電腦上的內容推上線。</div>`; renderPane(); return; }
+  const rows = rowsOf().slice().sort((a,b)=> TAB==="story" ? (a.sort||0)-(b.sort||0) : String(a.id).localeCompare(String(b.id)));
+  box.innerHTML = rows.map(x => `<div class="item" data-id="${esc(x.id)}">
+      <b>${esc(x.title || x.id)}</b><span>${esc(x.id)}${TAB==="story"?" ・第"+(x.sort??"")+"篇":""}</span></div>`).join("")
+    + `<button class="ghost" style="width:100%;margin-top:6px" id="addNew">＋ 新增${TAB==="story"?"故事":"商品"}</button>`;
+  box.querySelectorAll(".item").forEach(el=>{
+    el.onclick = () => { CUR = rows.find(r=>r.id===el.dataset.id); renderList(); renderPane(); };
+  });
+  const add = $("#addNew");
+  if (add) add.onclick = () => {
+    CUR = TAB === "story"
+      ? { id: "new-" + Date.now().toString(36), sort: (DATA.stories.length+1), categoryName:"", title:"", excerpt:"", mp3File:"", cover:"", layer1:"", layer2:"", layer3:"", scripture:"", status:"draft", productIds:[] }
+      : { id: "P" + String(DATA.products.length+1).padStart(3,"0"), category:"", title:"", tag:"", price:"", priceNum:0, unit:"", img:"", desc:"", features:[], storyIds:[], active:true };
+    renderList(); renderPane();
+  };
+  [...document.querySelectorAll(".item")].forEach(el=>{
+    if (CUR && el.dataset.id === CUR.id) el.classList.add("on");
+  });
+}
+
+function fieldHtml([key,label,type], val){
+  const v = Array.isArray(val) ? val.join("\n") : (val ?? "");
+  if (type === "textarea")
+    return `<label>${label}</label><textarea data-k="${key}">${esc(v)}</textarea>`;
+  return `<label>${label}</label><input data-k="${key}" type="${type}" value="${esc(v)}">`;
+}
+
+function renderPane(){
+  const pane = $("#pane");
+  if (TAB === "publish"){
+    pane.innerHTML = `
+      <h2 style="font-size:1rem;margin:0 0 6px">發布到網站</h2>
+      <div class="hint">會做的事：把故事／商品／圖片／音檔同步到 dist，然後推上 Cloudflare。<br>
+      大約 30–60 秒。發布前建議先按「看一下網站」確認內容。</div>
+      <div class="bar">
+        <button id="pub">🚀 發布上線</button>
+        <button class="ghost" id="syncd1">🔄 同步價錢到收單系統</button>
+        <button class="ghost" onclick="window.open('${DATA.site}','_blank')">🌐 看一下網站</button>
+      </div>
+      <div id="log">還沒發布過。</div>`;
+    $("#syncd1").onclick = async () => {
+      $("#syncd1").disabled = true;
+      $("#log").textContent = "同步中…";
+      try {
+        const r = await fetch("/api/sync-d1", { method:"POST" });
+        const d = await r.json();
+        $("#log").textContent = d.ok
+          ? `✅ 已同步 ${d.products} 個商品、${d.tiers} 個階梯\n現在網站和結帳用的是同一份價錢。`
+          : "❌ 同步失敗\n" + (d.log || "");
+        toast(d.ok ? "價錢已同步" : "同步失敗");
+      } catch (e) {
+        $("#log").textContent = "❌ 同步失敗：" + e.message;
+      }
+      $("#syncd1").disabled = false;
+    };
+    $("#pub").onclick = async () => {
+      $("#pub").disabled = true;
+      $("#log").textContent = "發布中…（會先同步價錢，約 30–60 秒）";
+      const r = await fetch("/api/publish", { method:"POST" });
+      const d = await r.json();
+      const syncLine = d.sync ? (d.sync.ok ? "價錢同步：✅ " + d.sync.products + " 個商品\n" : "價錢同步：❌ " + (d.sync.log || "") + "\n") : "";
+      $("#log").textContent = (d.ok ? "✅ 完成" : "❌ 失敗") + (d.url ? "：" + d.url : "") + "\n\n" + syncLine + (d.log || "");
+      $("#pub").disabled = false;
+      toast(d.ok ? "已發布" : "發布失敗");
+    };
+    return;
+  }
+
+  if (!CUR){ pane.innerHTML = `<div class="hint">左邊點一篇，開始改。或按最下面「新增」。</div>`; return; }
+
+  const fields = TAB === "story" ? STORY_FIELDS : PRODUCT_FIELDS;
+  pane.innerHTML = fields.map(f => fieldHtml(f, CUR[f[0]])).join("") + `
+    <div class="bar">
+      <button id="save">💾 儲存</button>
+      <button class="ghost" id="revert">復原</button>
+      <button class="danger" id="del" style="margin-left:auto">刪除</button>
+    </div>
+    <div class="hint" style="margin-top:12px">存檔只改本機檔案，還沒上線。要上線請到「發布」。</div>`;
+
+  $("#save").onclick = async () => {
+    const item = {};
+    pane.querySelectorAll("[data-k]").forEach(el => {
+      const k = el.dataset.k;
+      let v = el.value;
+      if (k === "productIds" || k === "storyIds") v = v.split(/[,\s]+/).filter(Boolean);
+      else if (k === "features") v = v.split("\n").map(s=>s.trim()).filter(Boolean);
+      else if (k === "sort" || k === "priceNum") v = Number(v) || 0;
+      else if (k === "active") v = String(v).trim() === "true";
+      item[k] = v;
+    });
+    const r = await fetch("/api/save", { method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ type: TAB, item }) });
+    const d = await r.json();
+    if (d.ok){ toast("已儲存"); CUR = item; await load(); renderList(); renderPane(); }
+    else toast("儲存失敗");
+  };
+
+  $("#revert").onclick = () => load().then(()=>{ renderList(); renderPane(); });
+
+  $("#del").onclick = async () => {
+    if (!confirm("確定刪除？刪了就沒了（記得先發布前想清楚）。")) return;
+    await fetch("/api/delete", { method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ type: TAB, id: CUR.id }) });
+    CUR = null; await load(); renderList(); renderPane(); toast("已刪除");
+  };
+}
+
+document.querySelectorAll(".tab").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    TAB = b.dataset.tab; CUR = null;
+    renderList(); renderPane();
+  };
+});
+
+load();
+</script>
+</body>
+</html>
