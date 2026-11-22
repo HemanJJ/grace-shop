@@ -33,8 +33,18 @@
   <div class="box">
     <p style="margin-top:0"><b>桌面只有一顆要按：🎛 電台工作台。</b><br>
     雙擊它，會自動叫起本機後台與控音台，再開四個分頁：改東西、錄音、看單、上架。</p>
-    <p style="margin-bottom:0"><b>只有兩組密碼：</b>本機後台 <code>Hjh16789</code>（存在 cms_password.txt）／看單 <code>grace-8be3c6ee</code>（存在 order-api/看單密碼.txt）。</p>
+    <p style="margin-bottom:0"><b>只有兩組密碼，就是下面這兩組。</b></p>
   </div>
+
+  <h2>兩組密碼（就這兩組）</h2>
+  <table>
+    <tr><th>用在哪</th><th>帳號</th><th>密碼</th><th>存在哪個檔</th></tr>
+    <tr><td><b>本機後台</b>（127.0.0.1:8756）</td><td>不用帳號</td><td style="font-size:20px"><code>Hjh16789</code></td><td><code>cms_password.txt</code></td></tr>
+    <tr><td><b>看單</b>（/orders）</td><td>不用帳號</td><td style="font-size:20px"><code>grace-8be3c6ee</code></td><td><code>order-api/看單密碼.txt</code></td></tr>
+    <tr><td>上架單（/sheet）</td><td colspan="3">不用密碼（公開頁，只收填寫，看不到訂單）</td></tr>
+    <tr><td>控音台（127.0.0.1:8766）</td><td colspan="3">不用密碼（只在你這台電腦）</td></tr>
+  </table>
+  <p class="lead" style="margin-top:6px">這兩組只在你電腦的檔案裡，網站上看不到。要改密碼就改那兩個檔，然後重開工作台。</p>
 
   <h2>五個地方，各管什麼</h2>
   <table>

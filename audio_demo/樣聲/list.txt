@@ -1,0 +1,8 @@
+file '/Users/defi/一號/projects/DEMO_light_shop/audio_demo/樣聲/t0s.mp3'
+file '/Users/defi/一號/projects/DEMO_light_shop/audio_demo/樣聲/sil.mp3'
+file '/Users/defi/一號/projects/DEMO_light_shop/audio_demo/樣聲/t1s.mp3'
+file '/Users/defi/一號/projects/DEMO_light_shop/audio_demo/樣聲/sil.mp3'
+file '/Users/defi/一號/projects/DEMO_light_shop/audio_demo/樣聲/t2s.mp3'
+file '/Users/defi/一號/projects/DEMO_light_shop/audio_demo/樣聲/sil.mp3'
+file '/Users/defi/一號/projects/DEMO_light_shop/audio_demo/樣聲/t3s.mp3'
+file '/Users/defi/一號/projects/DEMO_light_shop/audio_demo/樣聲/sil.mp3'

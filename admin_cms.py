@@ -116,6 +116,12 @@ def publish_to_github(remote_url: str = "") -> dict:
                 "message": "尚未綁定新 GitHub 倉庫網址，請先輸入您的新 GitHub 倉庫網址（例如 https://github.com/HemanJJ/grace-shop.git）",
             }
 
+        # 確保只將前台公開檔案推上 GitHub，本機後台 admin_cms.py 與 .command 保持本機私有
+        subprocess.run(
+            ["git", "rm", "-r", "--cached", "--ignore-unmatch", "admin_cms.py", "HANDOFF.md", "netlify.toml", "__pycache__"],
+            cwd=str(ROOT_DIR),
+            capture_output=True,
+        )
         subprocess.run(["git", "add", "-A"], cwd=str(ROOT_DIR), check=True)
         commit_msg = f"CMS 更新故事與商品 ({time.strftime('%Y-%m-%d %H:%M:%S')})"
         subprocess.run(["git", "commit", "-m", commit_msg], cwd=str(ROOT_DIR), capture_output=True)

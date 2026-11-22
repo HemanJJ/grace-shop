@@ -3,7 +3,7 @@
     "id": "couple-love",
     "categoryKey": "love",
     "categoryName": "❤️ 01. 愛 ｜ 夫妻相守",
-    "mp3File": "./mp3/01_愛篇_林伯伯熱芝麻拿鐵.mp3",
+    "mp3File": "./mp3/ep01.mp3",
     "title": "結婚五十週年的那杯熱芝麻拿鐵：輕度失智的林伯伯忘了日期，卻沒忘記幫老伴溫牛奶",
     "excerpt": "記憶會隨歲月慢慢變淡，但刻在骨子裡的愛不會。每天早上七點，林伯伯依然站在廚房為結縭半世紀的妻子泡一杯溫熱的芝麻拿鐵。",
     "cover": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80",
@@ -26,13 +26,16 @@
     },
     "status": "published",
     "sort": 1,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": [
+      "P001"
+    ]
   },
   {
     "id": "reconcile-forgiveness",
     "categoryKey": "forgiveness",
     "categoryName": "🤝 02. 饒恕 ｜ 父子和解",
-    "mp3File": "./mp3/02_饒恕篇_李長老父子破冰咖啡.mp3",
+    "mp3File": "./mp3/ep02.mp3",
     "title": "冷戰十年的父子，因為中秋節寄來的一盒錄音濾掛咖啡紅了眼眶",
     "excerpt": "說不出口的那句「對不起，爸很以你為傲」，透過咖啡包上的 60 秒語音 QR Code，融化了父子十年的冰山。",
     "cover": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
@@ -55,13 +58,14 @@
     },
     "status": "published",
     "sort": 2,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": []
   },
   {
     "id": "icu-waiting",
     "categoryKey": "waiting",
     "categoryName": "⏳ 03. 等候 ｜ 守候黎明",
-    "mp3File": "./mp3/03_等候篇_吳師母洋甘菊博士茶.mp3",
+    "mp3File": "./mp3/ep03.mp3",
     "title": "在加護病房外守候的十四個夜晚，師母保溫瓶裡那杯不曾冷掉的洋甘菊博士茶",
     "excerpt": "當化驗報告還沒出來、心裡焦急到整夜睡不著時，這杯零咖啡因的溫暖草本茶，陪她安靜等候神的時刻。",
     "cover": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80",
@@ -84,13 +88,16 @@
     },
     "status": "published",
     "sort": 3,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": [
+      "P003"
+    ]
   },
   {
     "id": "choir-hope",
     "categoryKey": "hope",
     "categoryName": "🌅 04. 盼望 ｜ 樂齡綻放",
-    "mp3File": "./mp3/04_盼望篇_82歲王奶奶長青詩班.mp3",
+    "mp3File": "./mp3/ep04.mp3",
     "title": "八十二歲才開始學看五線譜，王奶奶在長青詩班裡找回少女時代的笑容",
     "excerpt": "誰說八十歲只能在家看電視等吃飯？換上大字紅藍歌譜、泡一壺潤喉羅漢果茶，王奶奶站在台上唱出最亮麗的盼望！",
     "cover": "https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=800&q=80",
@@ -113,13 +120,14 @@
     },
     "status": "published",
     "sort": 4,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": []
   },
   {
     "id": "pastor-peace",
     "categoryKey": "peace",
     "categoryName": "🕊️ 05. 平安 ｜ 晨更與好眠",
-    "mp3File": "./mp3/05_平安篇_林牧師清晨六點半的熱咖啡.mp3",
+    "mp3File": "./mp3/ep05.mp3",
     "title": "走過師母離世的空蕩客廳，林牧師每天清晨六點半的那一杯熱咖啡",
     "excerpt": "相伴半世紀的師母安息後，76 歲的林牧師如何靠著聖經裡的一張字條與清晨熱咖啡，把孤單化為代禱的力量？",
     "cover": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80",
@@ -143,13 +151,17 @@
     },
     "status": "published",
     "sort": 5,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": [
+      "P005"
+    ],
+    "altAudio": "./mp3/ep05_visit.mp3"
   },
   {
     "id": "farmer-grace",
     "categoryKey": "grace",
     "categoryName": "🌿 06. 恩典 ｜ 土地與養生",
-    "mp3File": "./mp3/06_恩典篇_張長老不灑農藥的黃金苦茶油.mp3",
+    "mp3File": "./mp3/ep06.mp3",
     "title": "被笑是「不灑農藥的傻瓜」，泰雅族張長老用二十年守護的一滴黃金苦茶油",
     "excerpt": "面對颱風落果與收購商勸說摻假油，70 歲張長老在苦茶林裡向神立約：地裡的果子是用來祝福長輩腸胃的。",
     "cover": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80",
@@ -173,13 +185,16 @@
     },
     "status": "published",
     "sort": 6,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": [
+      "P006"
+    ]
   },
   {
     "id": "visit-companionship",
     "categoryKey": "companionship",
     "categoryName": "☕ 07. 陪伴 ｜ 探訪關懷",
-    "mp3File": "./mp3/07_陪伴篇_美玲姊週三下午手沖約定.mp3",
+    "mp3File": "./mp3/ep07.mp3",
     "title": "每週三下午三點的敲門聲：退休護理師美玲姊與獨居長輩的「五分鐘手沖約定」",
     "excerpt": "不帶沉重的說教，只帶一包故事濾掛與一顆溫暖的橄欖木十字架握件，陪獨居的趙奶奶說說年輕時的故事。",
     "cover": "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80",
@@ -202,13 +217,14 @@
     },
     "status": "published",
     "sort": 7,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": []
   },
   {
     "id": "harvest-gratitude",
     "categoryKey": "gratitude",
     "categoryName": "🌾 08. 感恩 ｜ 走過幽谷",
-    "mp3File": "./mp3/08_感恩篇_許長老紅藜麥豐收感恩.mp3",
+    "mp3File": "./mp3/ep08.mp3",
     "title": "走過糖尿病差點截肢的低谷，屏東許長老用「帶殼紅藜與純野蜜」向神獻上感恩",
     "excerpt": "曾經因為愛吃精緻澱粉與甜食導致血糖失控，如今 72 歲的許長老用部落高纖紅藜麥找回健康，更把豐收分享給病友。",
     "cover": "https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&w=800&q=80",
@@ -231,13 +247,16 @@
     },
     "status": "published",
     "sort": 8,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": [
+      "P008"
+    ]
   },
   {
     "id": "active-restart",
     "categoryKey": "restart",
     "categoryName": "🚶‍♂️ 09. 重新開始 ｜ 慢老活力",
-    "mp3File": "./mp3/09_重新開始篇_76歲周伯伯背吉他唱詩歌.mp3",
+    "mp3File": "./mp3/ep09.mp3",
     "title": "從膝蓋退化不敢下樓梯，到七十六歲背著吉他走進病房唱詩歌的周伯伯",
     "excerpt": "曾經因為雙膝刺痛推掉所有團契聚會，在物理治療師弟兄的陪伴下，周伯伯找回了走進醫院服事的雙腿！",
     "cover": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
@@ -261,13 +280,16 @@
     },
     "status": "published",
     "sort": 9,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": [
+      "P009"
+    ]
   },
   {
     "id": "mama-home",
     "categoryKey": "home",
     "categoryName": "🍲 10. 回家 ｜ 餐桌與補養",
-    "mp3File": "./mp3/10_回家篇_陳媽媽熬了四十年的禱告湯.mp3",
+    "mp3File": "./mp3/ep10.mp3",
     "title": "一鍋熬了四十年的老母雞湯，藏著陳媽媽說不出口的思念與禱告",
     "excerpt": "孩子長大離家後，80 歲陳媽媽在教會愛宴大湯鍋前找回價值：「我每攪拌一次湯，心裡就為喝湯的人禱告一次。」",
     "cover": "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80",
@@ -291,6 +313,9 @@
     },
     "status": "published",
     "sort": 10,
-    "externalLink": ""
+    "externalLink": "",
+    "productIds": [
+      "P010"
+    ]
   }
 ]

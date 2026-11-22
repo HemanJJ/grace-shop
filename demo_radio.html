@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<meta name="msapplication-TileColor" content="#2a1710">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>光碼電台 ｜ 歲月恩典館（打樣 B 版・古早收音機）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wood-1:#2b180f; --wood-2:#4a2b19; --wood-3:#6b4026; --wood-4:#8a5733;
+  --panel:#f3e5c6; --panel-2:#e7d2a6; --panel-ink:#33200f;
+  --ink:#2a1a0e; --ink-soft:#5d4530;
+  --paper:#f7edd6; --kraft:#d8bc8e;
+  --red:#b23a2b; --red-deep:#8c281c;
+  --gold:#c9a227; --gold-soft:#e8ce7a;
+  --green:#8fd07a; --green-deep:#3f7a33;
+  --line:#e7e7e7;
+  --fs:18px;
+  --serif:'Noto Serif TC',serif;
+  --sans:'Noto Sans TC',system-ui,-apple-system,sans-serif;
+}
+body.large{--fs:22px}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--sans); font-size:var(--fs); color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 50% -10%, #4a2b19 0%, #2a1710 55%, #170d08 100%);
+  min-height:100vh; padding:0 0 80px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ============ 打樣標示 ============ */
+.demo-flag{
+  position:fixed; right:14px; bottom:64px; z-index:99;
+  background:var(--red); color:#fff; font-size:.72rem; letter-spacing:.12em;
+  padding:8px 12px; border-radius:3px; box-shadow:0 6px 18px rgba(0,0,0,.45);
+  font-weight:700; opacity:.92;
+}
+
+/* ============ 木殼機身 ============ */
+.case-wrap{max-width:1180px; margin:0 auto; padding:26px 16px 0}
+.radio-case{
+  position:relative; border-radius:22px; padding:20px 22px 16px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.10) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(88deg, rgba(255,255,255,.045) 0 1px, transparent 1px 11px),
+    linear-gradient(160deg,#6b4026 0%,#4a2b19 42%,#3a2113 70%,#54301c 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255,214,150,.28),
+    inset 0 -3px 10px rgba(0,0,0,.6),
+    0 26px 60px rgba(0,0,0,.55),
+    0 3px 0 #1a0d07;
+  border:1px solid #2a1710;
+}
+.radio-case::after{ /* 木紋高光 */
+  content:""; position:absolute; inset:0; border-radius:22px; pointer-events:none;
+  background:linear-gradient(115deg, rgba(255,220,170,.10) 0%, transparent 32%, transparent 72%, rgba(255,220,170,.05) 100%);
+}
+.nameplate{
+  display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px;
+}
+.brand{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.brand h1{
+  font-family:var(--serif); font-weight:900; font-size:clamp(1.5rem,3.4vw,2.15rem);
+  margin:0; letter-spacing:.14em; color:#f6e3bd;
+  text-shadow:0 1px 0 #2a1710, 0 -1px 0 rgba(255,240,200,.35), 0 4px 10px rgba(0,0,0,.5);
+}
+.brand .band{
+  font-family:var(--serif); font-size:.72rem; letter-spacing:.3em; color:var(--gold-soft);
+  border:1px solid rgba(233,206,122,.5); padding:3px 8px; border-radius:2px; white-space:nowrap;
+}
+.onair{display:flex; align-items:center; gap:8px; font-size:.68rem; letter-spacing:.22em; color:#f0dcb4; font-weight:700}
+.lamp{
+  width:13px; height:13px; border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #ffb9a8, #c0392b 45%, #5c1108 100%);
+  box-shadow:0 0 0 2px rgba(0,0,0,.35), 0 0 10px rgba(255,80,50,.55);
+  animation:breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{opacity:.55; box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 6px rgba(255,80,50,.35)}50%{opacity:1; box-shadow:0 0 0 2px rgba(0,0,0,.35),0 0 16px rgba(255,90,55,.7)}}
+
+/* ============ 刻度盤 ============ */
+.dial-frame{
+  position:relative; border-radius:12px; padding:9px;
+  background:linear-gradient(180deg,#20130b,#3a2113 40%,#1c1008);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.8), 0 1px 0 rgba(255,220,170,.18);
+}
+.dial{
+  position:relative; border-radius:8px; overflow:hidden;
+  background:
+    linear-gradient(180deg,#f7ecd0 0%, #efdfba 46%, #e3ceA1 100%);
+  box-shadow:inset 0 0 0 1px rgba(120,84,40,.45), inset 0 8px 16px rgba(120,84,40,.22);
+  padding:14px 18px 10px;
+}
+.dial::after{ /* 玻璃反光 */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(103deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.06) 20%, transparent 42%);
+}
+.dial-top{display:flex; justify-content:space-between; align-items:center; font-family:var(--serif); font-size:.66rem; letter-spacing:.26em; color:#7a5a33; font-weight:700}
+.stations{position:relative; display:grid; grid-template-columns:repeat(10,1fr); gap:2px; margin-top:8px}
+.station{
+  position:relative; background:none; border:0; cursor:pointer; padding:26px 0 10px;
+  font-family:var(--serif); color:#5b3d20; transition:color .2s;
+}
+.station .num{display:block; font-size:.95rem; font-weight:700; letter-spacing:.06em; line-height:1}
+.station .tick{position:absolute; left:50%; bottom:2px; width:1px; height:7px; background:#8a6636; transform:translateX(-50%)}
+.station.on{background:linear-gradient(180deg,transparent 30%, rgba(178,58,43,.10) 100%)}
+.station.on .num{color:var(--red-deep); font-size:1.12rem; text-shadow:0 0 12px rgba(178,58,43,.25)}
+.station.on .tick{background:var(--red-deep); width:2px}
+.station:hover .num{color:var(--red)}
+.station .cat{display:block; font-size:.6rem; letter-spacing:.08em; color:#8a6636; margin-top:3px; opacity:.85}
+@media (max-width:820px){ .station .cat{display:none} .station{padding-top:20px} }
+.needle{
+  position:absolute; bottom:0; height:calc(100% - 46px); width:3px; background:var(--red);
+  box-shadow:0 0 8px rgba(255,60,40,.85), 0 0 2px #fff;
+  transition:left .55s cubic-bezier(.4,1.5,.5,1); border-radius:2px; pointer-events:none;
+}
+.needle::before{content:""; position:absolute; top:-4px; left:-4px; width:11px; height:11px; border-radius:50%; background:var(--red); box-shadow:0 0 10px rgba(255,60,40,.8)}
+
+/* ============ 喇叭 + 旋鈕 ============ */
+.deck{display:grid; grid-template-columns:1.1fr 1fr; gap:14px; margin-top:14px}
+@media (max-width:820px){ .deck{grid-template-columns:1fr} }
+.grille{
+  border-radius:10px; min-height:112px; position:relative; overflow:hidden;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.35) 0 2px, transparent 2px 9px),
+    linear-gradient(180deg,#cbb182,#a98c5c);
+  box-shadow:inset 0 0 0 2px rgba(30,18,10,.55), inset 0 0 26px rgba(60,36,16,.55);
+  display:flex; align-items:flex-end; justify-content:space-between; padding:10px 14px;
+}
+.grille .magic-eye{
+  width:44px; height:44px; border-radius:50%;
+  background:radial-gradient(circle at 50% 50%, #d9ffc4 0%, #7fc06a 26%, #2f6b28 62%, #10240c 100%);
+  box-shadow:inset 0 0 10px #000, 0 0 14px rgba(120,220,100,.28);
+  opacity:.35; transition:opacity .4s;
+}
+.playing .grille .magic-eye{opacity:1; box-shadow:inset 0 0 10px #000, 0 0 24px rgba(140,240,120,.75); animation:eye 1.6s ease-in-out infinite}
+@keyframes eye{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.grille .plate{
+  font-family:var(--serif); font-size:.56rem; letter-spacing:.2em; color:#e8d3a9; white-space:nowrap;
+  background:linear-gradient(180deg,#3a2113,#241409); padding:4px 9px 3px; border-radius:2px;
+  box-shadow:inset 0 1px 0 rgba(255,220,170,.25), 0 2px 6px rgba(0,0,0,.5);
+}
+.knob-panel{
+  border-radius:10px; padding:12px 14px; display:flex; align-items:center; justify-content:space-around; gap:10px;
+  background:linear-gradient(180deg,#3a2113,#26150c);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.8), inset 0 -1px 0 rgba(255,220,170,.12);
+}
+.knob{display:flex; flex-direction:column; align-items:center; gap:6px; background:none; border:0; cursor:pointer; color:#e8d3a9}
+.knob .dial-face{
+  width:54px; height:54px; border-radius:50%; position:relative;
+  background:
+    radial-gradient(circle at 38% 32%, #6b4026 0%, #3a2113 62%, #1a0d07 100%);
+  box-shadow:inset 0 2px 4px rgba(255,220,170,.28), inset 0 -4px 8px rgba(0,0,0,.7), 0 4px 10px rgba(0,0,0,.5);
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.knob .dial-face::before{ /* 指針記號 */
+  content:""; position:absolute; left:50%; top:5px; width:2px; height:14px;
+  background:linear-gradient(180deg,#f3e5c6,#8a6636); transform:translateX(-50%); border-radius:1px;
+}
+.knob .dial-face::after{ /* 中心鉚釘 */
+  content:""; position:absolute; inset:50% auto auto 50%; width:9px; height:9px; margin:-4.5px 0 0 -4.5px;
+  border-radius:50%; background:radial-gradient(circle at 35% 32%,#f3e5c6,#8a6636);
+}
+.knob.big .dial-face{width:72px; height:72px; background:radial-gradient(circle at 38% 32%,#8a5733 0%,#4a2b19 60%,#1a0d07 100%)}
+.knob.big .dial-face::before{height:20px}
+.knob span{font-size:.66rem; letter-spacing:.14em; font-weight:700}
+.knob:active .dial-face{transform:scale(.96)}
+.knob.disabled{opacity:.35; pointer-events:none}
+
+/* ============ 節目資訊 ============ */
+.now{
+  max-width:1180px; margin:22px auto 0; padding:0 16px;
+}
+.slip{
+  background:linear-gradient(180deg,#f7ecd0,#efe0bb);
+  border-radius:4px; padding:18px 22px 20px; position:relative;
+  box-shadow:0 12px 30px rgba(0,0,0,.45), inset 0 0 0 1px rgba(120,84,40,.3);
+}
+.slip::before{ /* 打孔邊 */
+  content:""; position:absolute; left:0; right:0; top:0; height:7px;
+  background:radial-gradient(circle at 6px 0, transparent 5px, #f3e5c6 5.5px) repeat-x;
+  background-size:12px 7px; opacity:.0;
+}
+.meta-row{display:flex; align-items:center; gap:12px; flex-wrap:wrap; font-size:.72rem; letter-spacing:.18em; color:#8a6636; font-family:var(--serif); font-weight:700}
+.chan-no{
+  display:inline-flex; align-items:center; justify-content:center; min-width:56px; height:34px; padding:0 10px;
+  background:var(--red); color:#fff8ec; border-radius:3px; font-size:1.02rem; letter-spacing:.06em;
+  box-shadow:0 3px 0 var(--red-deep), 0 6px 14px rgba(0,0,0,.28);
+}
+h2.title{
+  font-family:var(--serif); font-weight:900; line-height:1.45; letter-spacing:.02em;
+  font-size:clamp(1.28rem,2.6vw,1.85rem); margin:12px 0 6px; color:var(--ink);
+}
+.excerpt{color:var(--ink-soft); font-size:.95rem; line-height:1.85; margin:0}
+
+/* ============ 聲音條 ============ */
+.player{
+  margin-top:16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  background:linear-gradient(180deg,#2f1c10,#1e1009); border-radius:100px; padding:8px 14px 8px 8px;
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.7);
+}
+.player .go{
+  width:46px; height:46px; border-radius:50%; border:0; cursor:pointer; flex:0 0 auto;
+  background:radial-gradient(circle at 36% 30%,#e9cf9a,#c9a227 45%,#8a6636 100%);
+  color:#2a1a0e; font-size:1.1rem; box-shadow:0 4px 12px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.6);
+}
+.player .go:active{transform:scale(.95)}
+.player .wave{flex:1 1 160px; height:26px; display:flex; align-items:center; gap:2px; min-width:120px}
+.player .wave i{flex:1; background:linear-gradient(180deg,var(--gold-soft),#8a6636); height:20%; border-radius:1px; opacity:.5; transition:height .12s}
+.playing .player .wave i{opacity:1}
+.player .t{font-family:var(--serif); font-size:.72rem; color:#d8bc8e; letter-spacing:.1em; white-space:nowrap}
+
+/* ============ 雙欄：故事 + 工商服務 ============ */
+.main{max-width:1180px; margin:22px auto 0; padding:0 16px; display:grid; grid-template-columns:1.35fr .95fr; gap:20px; align-items:start}
+@media (max-width:940px){ .main{grid-template-columns:1fr} }
+
+.layer{
+  background:var(--paper); border-radius:4px; padding:18px 20px; margin-bottom:14px;
+  box-shadow:0 8px 22px rgba(0,0,0,.35), inset 0 0 0 1px rgba(120,84,40,.22);
+  line-height:2; font-size:.97rem; color:#33230f; position:relative;
+}
+.layer .tag{
+  display:inline-block; font-family:var(--serif); font-size:.64rem; letter-spacing:.28em;
+  color:#8a6636; border-bottom:1px solid rgba(138,102,54,.4); padding-bottom:2px; margin-bottom:10px; font-weight:700;
+}
+.layer.speaking{background:#fff9ea; box-shadow:0 8px 26px rgba(0,0,0,.4), 0 0 0 2px rgba(201,162,39,.55)}
+.scripture{
+  background:linear-gradient(180deg,#2f1c10,#241409); color:#f0dcb4; border-radius:4px;
+  padding:16px 18px; font-family:var(--serif); line-height:1.95; font-size:.92rem;
+  border-left:3px solid var(--gold); margin-bottom:14px; letter-spacing:.02em;
+}
+
+/* ============ 工商服務卡 ============ */
+.ad-card{
+  position:relative; border-radius:4px; padding:20px 20px 22px;
+  background:
+    repeating-linear-gradient(0deg, rgba(120,84,40,.05) 0 1px, transparent 1px 4px),
+    linear-gradient(165deg,#e6cda2,#d8bc8e 55%,#cbae7e);
+  box-shadow:0 14px 34px rgba(0,0,0,.45), inset 0 0 0 1px rgba(90,55,25,.35);
+  transform:rotate(-.5deg);
+}
+.ad-card .ad-label{
+  font-family:var(--serif); font-size:.66rem; letter-spacing:.34em; color:#7a5a33; font-weight:700;
+  border-bottom:2px solid rgba(122,90,51,.45); padding-bottom:6px; margin-bottom:12px;
+}
+.stamp{
+  position:absolute; right:14px; top:12px; width:64px; height:64px; border-radius:50%;
+  border:2px solid rgba(178,58,43,.75); color:rgba(178,58,43,.85);
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:var(--serif); font-weight:900; font-size:.62rem; line-height:1.15; letter-spacing:.06em;
+  transform:rotate(12deg); opacity:.9;
+}
+.ad-title{font-family:var(--serif); font-weight:900; font-size:1.06rem; line-height:1.5; margin:0 0 10px; padding-right:56px; color:#3a2113}
+.price{
+  font-family:var(--serif); font-weight:900; color:var(--red-deep); font-size:1.42rem;
+  letter-spacing:.02em; margin:6px 0 4px;
+}
+.price small{font-family:var(--sans); font-size:.68rem; color:#6b4a28; font-weight:500; letter-spacing:0}
+.feats{list-style:none; margin:12px 0 16px; padding:0}
+.feats li{font-size:.84rem; line-height:1.75; color:#4a3116; padding-left:16px; position:relative}
+.feats li::before{content:"◆"; position:absolute; left:0; color:var(--red); font-size:.6rem; top:.45em}
+.buy{
+  display:block; width:100%; text-align:center; text-decoration:none; cursor:pointer;
+  background:var(--red); color:#fff6e6; border:0; border-radius:3px; padding:14px 10px;
+  font-family:var(--serif); font-weight:900; font-size:1rem; letter-spacing:.1em;
+  box-shadow:0 4px 0 var(--red-deep), 0 10px 20px rgba(0,0,0,.3);
+}
+.buy:active{transform:translateY(2px); box-shadow:0 2px 0 var(--red-deep)}
+.buy-note{font-size:.72rem; color:#6b4a28; text-align:center; margin:10px 0 0; line-height:1.7}
+.pray-card{
+  border-radius:4px; padding:22px; text-align:center;
+  background:linear-gradient(165deg,#e8f2e2,#cfe3c6); color:#27401f;
+  box-shadow:0 14px 34px rgba(0,0,0,.35), inset 0 0 0 1px rgba(60,100,50,.3);
+}
+.pray-card h3{font-family:var(--serif); margin:0 0 10px; font-size:1.04rem}
+.pray-card p{font-size:.86rem; line-height:1.85; margin:0 0 16px; color:#3a5630}
+.pray-card .buy{background:#3f7a33; box-shadow:0 4px 0 #28501f, 0 10px 20px rgba(0,0,0,.25)}
+
+.foot{
+  max-width:1180px; margin:26px auto 0; padding:0 16px; color:#c8ab84; font-size:.76rem;
+  text-align:center; letter-spacing:.08em; line-height:1.9;
+}
+.toolbar{max-width:1180px; margin:0 auto; padding:12px 16px 0; display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap}
+.toolbar button{
+  background:rgba(243,229,198,.12); color:#e8d3a9; border:1px solid rgba(232,211,169,.4);
+  border-radius:100px; padding:7px 14px; font-size:.74rem; letter-spacing:.1em; cursor:pointer;
+  font-family:var(--sans);
+}
+.toolbar button:hover{background:rgba(243,229,198,.24)}
+</style>
+</head>
+<body>
+
+<div class="demo-flag">打樣 B 版・古早收音機</div>
+
+<div class="toolbar">
+  <button onclick="document.body.classList.toggle('large')">🔍 長輩大字</button>
+  <button onclick="toggleSpeech()">🗣️ 分段朗讀</button>
+</div>
+
+<div class="case-wrap">
+  <div class="radio-case" id="case">
+    <div class="nameplate">
+      <div class="brand">
+        <h1>光碼電台</h1>
+        <span class="band">歲月恩典館・AM 1080</span>
+      </div>
+      <div class="onair"><span class="lamp"></span><span>ON AIR</span></div>
+    </div>
+
+    <div class="dial-frame">
+      <div class="dial" id="dial">
+        <div class="dial-top"><span>頻　道　選　台</span><span id="dialHint">轉旋鈕，聽故事</span></div>
+        <div class="stations" id="stations"></div>
+        <div class="needle" id="needle" style="left:0"></div>
+      </div>
+    </div>
+
+    <div class="deck">
+      <div class="grille">
+        <div class="plate">GRACE RADIO</div>
+        <div class="magic-eye"></div>
+      </div>
+      <div class="knob-panel">
+        <button class="knob" id="prevBtn"><div class="dial-face"></div><span>◀ 上一篇</span></button>
+        <button class="knob big" id="playBtn"><div class="dial-face"></div><span>▶ 播放</span></button>
+        <button class="knob" id="nextBtn"><div class="dial-face"></div><span>下一篇 ▶</span></button>
+        <button class="knob" id="randBtn"><div class="dial-face"></div><span>🎲 隨機</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="now">
+  <div class="slip">
+    <div class="meta-row">
+      <span class="chan-no" id="chanNo">#05</span>
+      <span id="catName">🕊️ 平安 ｜ 晨更與好眠</span>
+      <span style="margin-left:auto; color:#8a6636;">🎙 阿光 主持</span>
+    </div>
+    <h2 class="title" id="stTitle">—</h2>
+    <p class="excerpt" id="stExcerpt">—</p>
+    <div class="player">
+      <button class="go" id="goBtn">▶</button>
+      <div class="wave" id="wave"></div>
+      <span class="t" id="timeTxt">00:00 / 00:00</span>
+      <label class="t" style="display:flex;align-items:center;gap:5px;cursor:pointer">
+        <input type="checkbox" id="autoNext" checked style="accent-color:#c9a227">聽完連播
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div id="storyCol"></div>
+  <div id="adCol"></div>
+</div>
+
+<div class="foot">
+  光碼電台 ｜ 歲月恩典館　·　本頁為古早收音機版打樣　·　內容僅供樣張審閱
+</div>
+
+<script>
+const STORIES = [
+{
+"id": "couple-love",
+"categoryKey": "love",
+"categoryName": "❤️ 01. 愛 ｜ 夫妻相守",
+"mp3File": "././mp3/ep01.mp3",
+"title": "結婚五十週年的那杯熱芝麻拿鐵：輕度失智的林伯伯忘了日期，卻沒忘記幫老伴溫牛奶",
+"excerpt": "記憶會隨歲月慢慢變淡，但刻在骨子裡的愛不會。每天早上七點，林伯伯依然站在廚房為結縭半世紀的妻子泡一杯溫熱的芝麻拿鐵。",
+"cover": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80",
+"layer1": "七十八歲的林伯伯兩年前開始出現輕度失智的症狀，有時候剛放下的眼鏡轉頭就找不到，連今天是星期幾都要問老伴好幾遍。林媽媽剛開始好焦慮，夜裡常偷偷掉眼淚，害怕那個曾經為全家人遮風擋雨的丈夫，有一天會連她的名字都忘記。",
+"layer2": "直到今年結婚五十週年那天早晨，林媽媽醒來走進廚房，看見林伯伯正對著貼在冰箱上的字條，一匙一匙認真地幫她沖泡溫熱的黑芝麻拿鐵。林伯伯轉過頭對她傻笑說：「我怕妳早上起來膝蓋冷，先喝這個暖暖身。」林媽媽看著桌上一深一淺的兩只馬克杯，眼淚瞬間潰堤——原來聖經說的「愛是永不止息」，真的連病痛也奪不走。",
+"layer3": "現在他們夫妻倆每天早上最幸福的儀式，就是坐在陽台邊曬太陽，邊喝這組【相守五十載・高鈣黑芝麻拿鐵雙人組】。細緻研磨的無糖純黑芝麻粉，加上溫和不傷胃的半低因濾掛咖啡，沖進熱牛奶裡又香又濃。無論是買給自己與老伴，或是兒女送給爸媽當結婚紀念禮，每一口都是長長久久的愛。",
+"scripture": "📖 經文祝福：「愛是恆久忍耐，又有恩慈……愛是永不止息。」——《哥林多前書 13:4-8》",
+"hasProduct": true,
+"product": {
+"tag": "❤️ 銀髮夫妻晨間對飲・結婚紀念首選",
+"title": "【相守五十載】無糖高鈣黑芝麻粉＋半低因故事濾掛咖啡雙人禮盒",
+"price": "NT$ 880 <small>/ 組（含黑芝麻粉 1 罐＋故事濾掛 10 包＋雙人祝福卡）</small>",
+"img": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=80",
+"desc": "把黑芝麻粉加入熱牛奶與半低因咖啡中，化作長輩每天早晨最香醇營養的「黑芝麻拿鐵」，補鈣又暖心。",
+"features": [
+"100% 台灣契作黑芝麻低溫慢焙，細緻好溶解不卡喉",
+"搭配低酸度半低因濾掛咖啡，溫順不心悸",
+"隨盒附贈「夫妻相守恩典有聲故事卡」"
+]
+},
+"status": "published",
+"sort": 1,
+"externalLink": ""
+},
+{
+"id": "reconcile-forgiveness",
+"categoryKey": "forgiveness",
+"categoryName": "🤝 02. 饒恕 ｜ 父子和解",
+"mp3File": "././mp3/ep02.mp3",
+"title": "冷戰十年的父子，因為中秋節寄來的一盒錄音濾掛咖啡紅了眼眶",
+"excerpt": "說不出口的那句「對不起，爸很以你為傲」，透過咖啡包上的 60 秒語音 QR Code，融化了父子十年的冰山。",
+"cover": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+"layer1": "七十歲的李長老個性木訥嚴肅，十年前因為反對兒子辭去公職創業，父子倆大吵一架後，兒子逢年過節只敢匯錢、卻很少回家坐下來好好吃頓飯。李長老嘴上不說，但每次看到別人家的孩子帶孫子回來，總是默默走進房間嘆氣。",
+"layer2": "去年受洗週年時，小組長鼓勵李長老錄一段六十秒的聲音印在故事咖啡包上寄給兒子。李長老對著麥克風憋了很久，才低聲說出：「阿明，爸以前講話太重了，看到你現在把家庭顧得很好，爸其實很以你為傲。有空回來喝杯咖啡吧。」",
+"layer3": "包裹寄出後第三天晚上，門鈴響了，兒子提著李長老最愛吃的滷味站在門口，眼眶紅紅地喊了一聲「爸」。原來，最難開口的饒恕與愛，有時候只需要一杯咖啡的時間，就能融化十年的冰山。我們也為每個家庭提供【破冰與和解・親口錄音客製咖啡禮盒】，幫您把說不出口的愛印在咖啡包上。",
+"scripture": "📖 經文祝福：「父親怎樣憐恤他的兒女，耶和華也怎樣憐恤敬畏祂的人。」——《詩篇 103:13》",
+"hasProduct": false,
+"product": {
+"tag": "🎁 客製化親口錄音・把愛說出口",
+"title": "【破冰與和解】親口錄音客製化 10×12cm 故事濾掛咖啡禮盒（10包入）",
+"price": "NT$ 590 <small>/ 盒（含代轉製 60 秒家人語音 QR Code）</small>",
+"img": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+"desc": "把說不出口的道歉、感謝與叮嚀錄進咖啡包裡，讓收禮的家人手機一掃就聽見您的聲音。",
+"features": [
+"支援手機 LINE 語音直接轉製專屬 QR Code",
+"10×12cm 溫暖手繪風外袋小量印製",
+"溫和中深焙堅果可可風味，長輩與年輕人都愛喝"
+]
+},
+"status": "published",
+"sort": 2,
+"externalLink": ""
+},
+{
+"id": "icu-waiting",
+"categoryKey": "waiting",
+"categoryName": "⏳ 03. 等候 ｜ 守候黎明",
+"mp3File": "././mp3/ep03.mp3",
+"title": "在加護病房外守候的十四個夜晚，師母保溫瓶裡那杯不曾冷掉的洋甘菊博士茶",
+"excerpt": "當化驗報告還沒出來、心裡焦急到整夜睡不著時，這杯零咖啡因的溫暖草本茶，陪她安靜等候神的時刻。",
+"cover": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80",
+"layer1": "人生最難熬的功課，往往不是忙碌，而是「不知道結果的等候」。去年秋天，吳長老因為突發心肌梗塞送進加護病房，吳師母守在冰冷的候診室長椅上，看著牆上的時鐘一格一格走，每當護理師開門叫名字，她的心臟就跟著劇烈跳動，整整三天闔不上眼。",
+"layer2": "第四天傍晚，教會的小組姊妹帶來一壺熱騰騰的南非國寶博士茶，裡頭加了淡淡的洋甘菊，陪著吳師母在走廊邊喝邊低聲讀《詩篇》：「我的心哪，你當默默無聲，專等候神。」溫熱的茶湯順著喉嚨流進胃裡，緊繃發抖的雙手慢慢暖了起來，那天夜裡，吳師母終於靠在椅背上安穩睡了四個小時。兩週後，吳長老也奇蹟似地平安轉入普通病房。",
+"layer3": "許多長輩到了晚上容易胡思亂想、淺眠多夢，或是正在經歷等待檢查報告的焦慮期。這款【靜候黎明・晚安洋甘菊博士茶禮盒】，100% 零咖啡因、富含天然礦物質與舒緩草本清香。睡前一小時泡一杯溫熱喝下，讓身心在神的懷裡安靜下來，好好睡一覺。",
+"scripture": "📖 經文祝福：「但那等候耶和華的，必從新得力；他們必如鷹展翅上騰。」——《以賽亞書 40:31》",
+"hasProduct": true,
+"product": {
+"tag": "🌙 100% 零咖啡因・銀髮夜間舒眠首選",
+"title": "【靜候黎明】南非國寶博士茶＋黃金洋甘菊晚安舒眠茶禮盒（20包入）",
+"price": "NT$ 460 <small>/ 盒（買 2 盒送大字版睡前平安經文卡）</small>",
+"img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80",
+"desc": "嚴選南非頂級發酵紅灌木茶（Rooibos）搭配天然洋甘菊，完全不含咖啡因與草酸，睡前飲用溫潤安神、不傷胃。",
+"features": [
+"零咖啡因、低單寧酸，失眠或自律神經緊繃長輩最適合",
+"每包皆附有聲經文 QR Code，邊喝邊聽睡前祝福禱告",
+"醫院探訪、關懷憂慮長輩最貼心的平安伴手禮"
+]
+},
+"status": "published",
+"sort": 3,
+"externalLink": ""
+},
+{
+"id": "choir-hope",
+"categoryKey": "hope",
+"categoryName": "🌅 04. 盼望 ｜ 樂齡綻放",
+"mp3File": "././mp3/ep04.mp3",
+"title": "八十二歲才開始學看五線譜，王奶奶在長青詩班裡找回少女時代的笑容",
+"excerpt": "誰說八十歲只能在家看電視等吃飯？換上大字紅藍歌譜、泡一壺潤喉羅漢果茶，王奶奶站在台上唱出最亮麗的盼望！",
+"cover": "https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=800&q=80",
+"layer1": "八十二歲的王奶奶以前總說自己「五音不全、字又認得少」，每次坐在台下聽教會詩班獻詩，心裡好羨慕，卻連舉手報名的勇氣都沒有。她常跟女兒說：「我都這把年紀了，記性這麼差，去那裡只會拖累大家啦！」",
+"layer2": "沒想到長青詩班的指揮老師知道後，特地印了一份「超大字體、標上紅藍顏色記號」的歌譜送到她家，笑著對她說：「王媽媽，天父聽詩歌不是聽技巧，是聽妳喜樂的心！」當王奶奶第一次穿上詩班袍站在台上唱出《奇異恩典》時，台下的孫女邊錄影邊掉眼淚。",
+"layer3": "現在王奶奶每週最期待的就是星期四早上的詩班練唱，她總會泡一壺【詩班奶奶的潤喉恩典・羅漢果菊花茶】帶去跟姊妹們分享。古法慢烘的羅漢果加上台灣杭菊，不加一粒砂糖卻自然回甘，讓長輩唱歌、講見證喉嚨不再乾癢沙啞。",
+"scripture": "📖 經文祝福：「我要一生向耶和華唱詩！我還活的時候，要向我神歌頌！」——《詩篇 104:33》",
+"hasProduct": false,
+"product": {
+"tag": "🎵 長青詩班／講員牧者潤喉最愛",
+"title": "【詩班奶奶的潤喉恩典】古法無糖羅漢果菊花潤喉茶禮盒（15入）",
+"price": "NT$ 450 <small>/ 盒（詩班團購 5 盒 NT$ 1,980）</small>",
+"img": "https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=800&q=80",
+"desc": "專為愛唱詩歌、常講話分享見證的長輩調配，溫潤回甘、生津止渴，無咖啡因全天可飲。",
+"features": [
+"天然羅漢果與台灣杭菊慢火烘焙，零熱量、無人工甜味劑",
+"獨立三角立體茶包，熱水沖泡 3 分鐘即享甘甜",
+"隨盒附贈王奶奶《奇異恩典》有聲故事祝福卡"
+]
+},
+"status": "published",
+"sort": 4,
+"externalLink": ""
+},
+{
+"id": "pastor-peace",
+"categoryKey": "peace",
+"categoryName": "🕊️ 05. 平安 ｜ 晨更與好眠",
+"mp3File": "././mp3/ep05.mp3",
+"title": "走過師母離世的空蕩客廳，林牧師每天清晨六點半的那一杯熱咖啡",
+"excerpt": "相伴半世紀的師母安息後，76 歲的林牧師如何靠著聖經裡的一張字條與清晨熱咖啡，把孤單化為代禱的力量？",
+"cover": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80",
+"layer1": "牧會整整四十年，林牧師握過無數病床前顫抖的手，安慰過無數傷心的家庭。但三年前，相伴半世紀的師母安息主懷後，那間曾經充滿笑聲與飯菜香的老公寓，突然安靜得讓人害怕。林牧師回憶說：「那陣子，我每天早上四、五點就醒來，看著對面空著的藤椅，心裡想著，我都七十六歲了，孩子們都在外地忙，接下來的日子，我還要為誰早起呢？」",
+"layer2": "直到有一個下雨的清晨，他在整理師母留下的大字聖經時，翻到一張夾在詩篇二十三篇裡的手寫字條，上面是師母熟悉的字跡：「老伴，日子如何，你的力量也必如何。我先去天家等你，你早上起來，記得先喝杯熱的暖暖胃，再為教會的弟兄姊妹禱告。」那一刻，林牧師老淚縱橫。他走進廚房，燒了一壺開水，慢慢沖了一杯師母生前最愛聞的溫和中焙濾掛咖啡。當熱氣與焦糖香瀰漫在客廳裡，他第一次在孤單中，深深感受到了從天上來的擁抱與平安。",
+"layer3": "現在的林牧師，每天早上六點半準時泡一杯【牧者的晨更陪伴・半低因濾掛咖啡】，一邊喝，一邊拿著名單為長青團契的老朋友提名代禱。他說：「年紀大了，喝咖啡不是為了提神趕路，而是為了陪自己好好跟天父說說話。」我們特別把林牧師這段溫暖的見證與親口祝福錄成語音，印在每一包 10×12 公分的濾掛咖啡與無咖啡因博士茶外袋上。不論是留給自己早晨靈修，或是探訪獨居、失眠的老朋友，手機一掃，就能讓林牧師的聲音陪他度過一個平安的早晨。",
+"scripture": "📖 經文祝福：「耶和華所賜的福使人富足，並不加上憂慮。」——《箴言 10:22》｜ 🎙️ 結尾語音禱告：「願主耶穌的平安，今天早晨隨著這杯熱飲，暖進你的心裡。阿們。」",
+"hasProduct": true,
+"product": {
+"tag": "🎁 探訪病患／長輩晨更首選（10×12cm 專屬故事外袋）",
+"title": "【牧者的晨更陪伴】有聲故事半低因濾掛咖啡＋晚安博士茶禮盒",
+"price": "NT$ 490 <small>/ 盒（10包入｜教會團購 5 盒 NT$ 2,200）</small>",
+"img": "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80",
+"desc": "早上一包溫和不傷胃的半低因精品濾掛、晚上一包零咖啡因南非國寶博士茶。每包皆印有大字經文與林牧師有聲故事 QR Code。",
+"features": [
+"銀髮族友善：低酸度、不心悸、不影響夜晚睡眠",
+"每包外袋獨立印製 10×12cm 溫暖插畫與大字金句",
+"手機掃碼即可聽見 95 秒林牧師故事與祝福禱告",
+"附贈「主內探訪手寫祝福小卡」，小組探訪送禮最體面"
+]
+},
+"status": "published",
+"sort": 5,
+"externalLink": ""
+},
+{
+"id": "farmer-grace",
+"categoryKey": "grace",
+"categoryName": "🌿 06. 恩典 ｜ 土地與養生",
+"mp3File": "././mp3/ep06.mp3",
+"title": "被笑是「不灑農藥的傻瓜」，泰雅族張長老用二十年守護的一滴黃金苦茶油",
+"excerpt": "面對颱風落果與收購商勸說摻假油，70 歲張長老在苦茶林裡向神立約：地裡的果子是用來祝福長輩腸胃的。",
+"cover": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80",
+"layer1": "在海拔一千公尺的部落山上，七十歲的泰雅族張長老看著滿山坡的苦茶樹。十年前，身邊許多果農為了產量改噴除草劑與化肥，好幾次颱風過後，張長老堅持自然農法的果園落果掉了一大半，連收購商都搖頭笑他：「長老，你這樣種，連工錢都不夠貼！摻一點便宜的進口油賣，客人吃不出來啦！」那天晚上，看著教會修繕基金還差一大截，張長老心裡也曾閃過一絲動搖。",
+"layer2": "隔天主日清晨，張長老獨自走進霧氣繚繞的苦茶林裡禱告。看著樹枝上剛冒出的翠綠新芽，他想起受洗時牧師對他說的話：「我們只是上帝土地的管家，地裡長出來的果子，是要拿來祝福人的身體，不是拿來賺黑心錢的。」他摸著粗糙的樹幹向神立約：只要他還拿得動鋤頭，這片山林就絕不滴下一滴農藥，每一顆苦茶籽都要人工日曬、低溫慢榨，把最純淨的營養留下來。",
+"layer3": "沒想到，這份「傻瓜般的堅持」，成了許多胃不好、常胃酸逆流的教會長輩最依賴的日常恩典。七十二歲的李姊妹分享說：「以前早上空腹喝別家的油覺得油耗味好重，但張長老的苦茶油卻有一股淡淡的堅果清香，每天早上一小匙暖暖吞下去，胃裡一整天都好舒服！」這瓶【土地的恩典・冷壓初榨苦茶油】，裝的不只是山林的營養，更是一位主內長老對上帝、對弟兄姊妹最誠實的愛。",
+"scripture": "📖 經文祝福：「你手所辦的事，耶和華必命定福氣臨到你。」——《申命記 28:8》｜ 🎙️ 結尾語音禱告：「願天父賜福你手所做的工，也保守你和家人的腸胃與身體健壯。阿們。」",
+"hasProduct": true,
+"product": {
+"tag": "🌿 主內小農契作（零摻假・第一道低溫鮮榨）",
+"title": "【土地的恩典】部落長老冷壓初榨苦茶油 500ml（附有聲見證吊牌）",
+"price": "NT$ 1,280 <small>/ 瓶（孝親雙瓶禮盒組 NT$ 2,380 免運）</small>",
+"img": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80",
+"desc": "100% 台灣高山苦茶籽第一道冷壓初榨，富含單元不飽和脂肪酸（Omega-9）。適合長輩晨起空腹保養、拌麵線或溫和料理。",
+"features": [
+"主內張長老果園契作，無除草劑、人工採收日曬",
+"低溫鮮榨保留完整營養，清香回甘、絕無刺鼻油耗味",
+"瓶身附「張長老山林見證有聲故事卡」與晨起飲用量杯",
+"每售出一瓶即提撥 5% 支持偏鄉部落教會長青供餐"
+]
+},
+"status": "published",
+"sort": 6,
+"externalLink": ""
+},
+{
+"id": "visit-companionship",
+"categoryKey": "companionship",
+"categoryName": "☕ 07. 陪伴 ｜ 探訪關懷",
+"mp3File": "././mp3/ep07.mp3",
+"title": "每週三下午三點的敲門聲：退休護理師美玲姊與獨居長輩的「五分鐘手沖約定」",
+"excerpt": "不帶沉重的說教，只帶一包故事濾掛與一顆溫暖的橄欖木十字架握件，陪獨居的趙奶奶說說年輕時的故事。",
+"cover": "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80",
+"layer1": "八十五歲的趙奶奶自從摔傷髖關節後，出門去教會變得非常吃力，一整天家裡只有電視機的聲音。剛開始教會探訪隊去關心她時，好強的趙奶奶總覺得自己「成了別人的負擔」，客套兩句就催大家快點回去忙。",
+"layer2": "後來退休護理師美玲姊換了一個方式——她每週三下午只帶著兩包故事濾掛咖啡去敲門，笑著對趙奶奶說：「趙媽媽，我今天不是來探病的，我是嘴饞想借妳家的熱水泡杯咖啡，順便請教妳以前怎麼織毛衣的！」在咖啡香氣裡，趙奶奶終於卸下防備，握著美玲姊送她的橄欖木小十字架，聊起了她少女時代受洗的往事。",
+"layer3": "去探訪生病或獨居的長輩時，最怕兩手空空尷尬，或是送太貴重的禮盒讓長輩有壓力。這組【溫暖敲門・主內探訪陪伴小禮袋】，裡面包含一顆手工打磨、放口袋摸著禱告超安心的「溫潤橄欖木口袋十字架握件」，加上 5 包印有祝福語音的故事茶包與咖啡，是小組探訪最貼心的敲門磚。",
+"scripture": "📖 經文祝福：「你們各人的重擔要互相擔當，如此，就完全了基督的律法。」——《加拉太書 6:2》",
+"hasProduct": false,
+"product": {
+"tag": "🙏 教會小組探訪／醫院關懷必備伴手禮",
+"title": "【溫暖敲門】溫潤橄欖木口袋十字架握件＋5包有聲故事茶／咖啡禮袋",
+"price": "NT$ 390 <small>/ 組（教會關懷部團購 10 組 NT$ 3,500）</small>",
+"img": "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80",
+"desc": "專為長輩手掌弧度打磨的圓潤木質十字架握件，夜裡睡不著或緊張時握在手心禱告極具安全感，搭配 5 包有聲故事茶與咖啡。",
+"features": [
+"天然實木圓角打磨，溫潤親膚、長輩放口袋隨身攜帶",
+"內含 3 包無咖啡因博士茶＋2 包溫和低因故事濾掛",
+"附大字版「主內代禱祝福卡」，探訪送禮輕巧無負擔"
+]
+},
+"status": "published",
+"sort": 7,
+"externalLink": ""
+},
+{
+"id": "harvest-gratitude",
+"categoryKey": "gratitude",
+"categoryName": "🌾 08. 感恩 ｜ 走過幽谷",
+"mp3File": "././mp3/ep08.mp3",
+"title": "走過糖尿病差點截肢的低谷，屏東許長老用「帶殼紅藜與純野蜜」向神獻上感恩",
+"excerpt": "曾經因為愛吃精緻澱粉與甜食導致血糖失控，如今 72 歲的許長老用部落高纖紅藜麥找回健康，更把豐收分享給病友。",
+"cover": "https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&w=800&q=80",
+"layer1": "五年前，屏東的許長老因為長年血糖控制不佳，左腳底一個小傷口竟然惡化成蜂窩性組織炎，醫師甚至嚴肅地警告可能要截肢保命。躺在病床上的許長老看著自己的腳，懊悔地向神流淚禱告：「主啊，如果祢再給我一次機會保住這雙腳，我一定好好管理祢賜給我的身體！」",
+"layer2": "出院後，在基督徒營養師的指導下，許長老戒掉了精緻白米與加工甜食，改把部落原住民種植的「穀類紅寶石——台灣原生紅藜麥」加進白飯裡煮。高膳食纖維與優質植物蛋白，讓他的飯後精神與代謝一天比一天穩定。當他雙腳完全康復、重新走上講台見證那天，全教會都為他鼓掌流淚！",
+"layer3": "為了向神獻上感恩，許長老開始協助部落教會推廣這組【豐收的感恩・高山脫殼紅藜麥＋無糖堅果穀粉禮盒】。煮飯時只要加一小匙紅藜麥，軟糯好咀嚼、長輩牙口完全沒負擔，補足滿滿的鈣質與膳食纖維！",
+"scripture": "📖 經文祝福：「凡事謝恩，因為這是神在基督耶穌裡向你們所定的旨意。」——《帖撒羅尼迦前書 5:18》",
+"hasProduct": true,
+"product": {
+"tag": "🌾 銀髮控糖高纖主食・營養師推薦",
+"title": "【豐收的感恩】台灣高山脫殼紅藜麥 600g＋無加糖綜合堅果穀粉禮盒",
+"price": "NT$ 790 <small>/ 組（含脫殼免洗紅藜 2 包＋無糖堅果飲 1 罐）</small>",
+"img": "https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&w=800&q=80",
+"desc": "膳食纖維是地瓜的 7 倍、鈣質是牛奶的 5 倍！已脫殼處理不苦澀，與米飯同煮軟Q好吞嚥，是銀髮長輩最棒的日常主食升級。",
+"features": [
+"部落教會小農無農藥栽種，通過多重農藥殘留檢驗",
+"免浸泡：洗米時直接加入 1/5 比例紅藜即可一起蒸煮",
+"隨盒附贈「長輩控糖美味三餐食譜」與許長老有聲見證卡"
+]
+},
+"status": "published",
+"sort": 8,
+"externalLink": ""
+},
+{
+"id": "active-restart",
+"categoryKey": "restart",
+"categoryName": "🚶‍♂️ 09. 重新開始 ｜ 慢老活力",
+"mp3File": "././mp3/ep09.mp3",
+"title": "從膝蓋退化不敢下樓梯，到七十六歲背著吉他走進病房唱詩歌的周伯伯",
+"excerpt": "曾經因為雙膝刺痛推掉所有團契聚會，在物理治療師弟兄的陪伴下，周伯伯找回了走進醫院服事的雙腿！",
+"cover": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+"layer1": "兩年前的冬天，七十四歲的周伯伯因為雙膝退化加上天氣濕冷，上下公寓三樓的樓梯每走一步都像針扎一樣痛。因為怕兒女擔心、又怕出門麻煩別人，他開始推掉長青團契的聚會，每天坐在電視機前打瞌睡。周伯伯嘆氣說：「那時候看著窗外陽光很好，自己的腳卻不聽使喚，心裡真的很灰心，覺得人生是不是就這樣走下坡了？」",
+"layer2": "轉機發生在教會一位擔任物理治療師的年輕弟兄來家裡探訪他。弟兄沒有責備他不運動，而是溫柔地握著他的手一起禱告，對他說：「周伯伯，聖經說『直到髮白，神仍懷搋我們』。您的吉他彈得這麼好，病房裡還有好多長輩等著聽您唱詩歌呢！我們先把膝蓋保暖做好、把大腿肌力練回來，好不好？」從那天起，周伯伯每天早晚穿戴保暖護膝、補充高鈣黑芝麻飲，跟著治療師從坐在椅子上抬腿開始復健。",
+"layer3": "短短三個月後，周伯伯不僅能穩穩走下三樓，現在七十六歲的他，每週二都背著吉他跟著探訪隊走進醫院唱《恩典之路》！周伯伯常跟團契的老朋友分享這套陪他重新站起來的【健步如飛・樂齡行動保暖恩典組】——裡面有物理治療師推薦、不緊繃不捲邊的遠紅外線保暖護膝，以及早晨沖泡即飲的無糖高鈣黑芝麻糊。顧好膝蓋與骨本，不是為了別人，而是為了能繼續走出去，去愛我們想愛的人、去聚我們想聚的會！",
+"scripture": "📖 經文祝福：「直到你們年老，我仍這樣；直到你們髮白，我仍懷搋。」——《以賽亞書 46:4》｜ 🎙️ 結尾語音禱告：「主啊，賜給每位長輩如鷹返老還童的力量，腳步穩健，喜樂出門、平安回家。阿們。」",
+"hasProduct": true,
+"product": {
+"tag": "🦵 物理治療師弟兄推薦・長青團契揪團熱銷",
+"title": "【健步如飛去聚會】石墨烯遠紅外線保暖護膝＋低溫無糖高鈣黑芝麻糊組",
+"price": "NT$ 1,180 <small>/ 組（保暖護膝 1 雙＋高鈣黑芝麻粉 2 罐）</small>",
+"img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+"desc": "外穿保暖護關節、內補高鈣好吸收！專為台灣濕冷氣候與銀髮族退化關節設計的「內外雙護」恩典組合。",
+"features": [
+"親膚蓄熱護膝：3D 立體編織不勒腿肚、久坐不捲邊",
+"100% 純黑芝麻低溫慢焙：細緻分子不卡喉、無加糖超香濃",
+"隨箱附贈「周伯伯椅子抬腿 3 分鐘護膝操」大字圖解",
+"最適合買給膝蓋怕冷、上下樓梯吃力的父母或自己保養"
+]
+},
+"status": "published",
+"sort": 9,
+"externalLink": ""
+},
+{
+"id": "mama-home",
+"categoryKey": "home",
+"categoryName": "🍲 10. 回家 ｜ 餐桌與補養",
+"mp3File": "././mp3/ep10.mp3",
+"title": "一鍋熬了四十年的老母雞湯，藏著陳媽媽說不出口的思念與禱告",
+"excerpt": "孩子長大離家後，80 歲陳媽媽在教會愛宴大湯鍋前找回價值：「我每攪拌一次湯，心裡就為喝湯的人禱告一次。」",
+"cover": "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80",
+"layer1": "在教會的廚房裡，八十歲的陳媽媽總是繫著圍裙、站在大湯鍋前忙進忙出。大家都愛喝她煮的湯，卻很少人知道，年輕時陳媽媽的先生早逝，她一個人靠著在市場擺攤，拉拔三個孩子長大。陳媽媽紅著眼眶笑說：「以前家裡窮，孩子讀書晚回家，我買不起貴的補品，只能用小火慢熬一鍋雞湯等他們。現在孩子都成家立業在台北忙，換我一個人在老家吃飯，有時候煮了一鍋湯，卻不知道要盛給誰喝。」",
+"layer2": "後來，教會的傳道人邀請陳媽媽負責主日愛宴的湯品。當她看見剛動完手術的長輩、或是異鄉打拚的年輕人，喝下她熬的熱湯時臉上露出的幸福表情，陳媽媽突然明白：原來上帝把她的餐桌變大了！她說：「我每攪拌一次湯，心裡就在為喝湯的人禱告一次。只要大家喝得暖呼呼、身體有元氣，我就覺得自己八十歲還是好有用處！」",
+"layer3": "但我們也心疼，許多像陳媽媽一樣年紀大了的長輩，平時自己一個人在家捨不得開火，或者站在瓦斯爐前顧火怕忘記關瓦斯。因此，我們特別與主內營養師團隊合作，還原陳媽媽慢火細熬的精神，推出【媽媽的禱告湯・常溫慢熬純滴雞精】。不用冰冷凍、不用開瓦斯，長輩早上只要放進馬克杯泡熱水三分鐘，就能喝到零脂肪、小分子好吸收的滿滿元氣。買一盒寄給老家的爸媽，就像替不在身邊的你，每天早上為父母端上一碗熱騰騰的孝心。",
+"scripture": "📖 經文祝福：「親愛的兄弟啊，我願你凡事興盛，身體健壯，正如你的靈魂興盛一樣。」——《約翰三書 1:2》｜ 🎙️ 結尾語音禱告：「天父，求祢親自看顧我們遠方的父母，使他們胃口開、睡得好、身體有力量。阿們。」",
+"hasProduct": true,
+"product": {
+"tag": "💝 基督徒兒女孝親／探病補養冠軍",
+"title": "【媽媽的禱告湯】常溫慢熬紅羽土雞滴雞精禮盒（10包入＋有聲孝親卡）",
+"price": "NT$ 1,580 <small>/ 盒（免費代寫孝親祝福小卡）</small>",
+"img": "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80",
+"desc": "嚴選產銷履歷紅羽土雞，10 小時古法慢滴不加一滴水，濾油零膽固醇。常溫保存免佔冰箱，長輩隔水加熱 3 分鐘即飲。",
+"features": [
+"銀髮牙口與腸胃友善：小分子胺基酸豐富，早起一包提振精神",
+"安全免顧火：直接把鋁箔袋放進熱水杯浸泡 3 分鐘即可飲用",
+"隨盒附贈【陳媽媽有聲見證故事卡】＋兒女署名祝福",
+"住院探訪、術後調養、母親節／父親節／重陽節最暖心禮物"
+]
+},
+"status": "published",
+"sort": 10,
+"externalLink": ""
+}
+];
+
+let idx = 0;
+let audio = new Audio();
+let speechOn = false;
+let actx = null;
+
+const $ = s => document.querySelector(s);
+
+/* ---------- 電台雜訊（切台 0.35 秒） ---------- */
+function noiseBurst(){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const dur = 0.35, sr = actx.sampleRate;
+    const buf = actx.createBuffer(1, sr*dur, sr);
+    const d = buf.getChannelData(0);
+    for(let i=0;i<d.length;i++){
+      const env = Math.min(1, i/(sr*0.02)) * Math.max(0, 1 - i/(sr*dur));
+      d[i] = (Math.random()*2-1) * 0.35 * env;
+    }
+    const src = actx.createBufferSource(); src.buffer = buf;
+    const bp = actx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1800; bp.Q.value=0.7;
+    const g = actx.createGain(); g.gain.value = 0.5;
+    src.connect(bp).connect(g).connect(actx.destination); src.start();
+  }catch(e){}
+}
+
+/* ---------- 刻度盤 ---------- */
+function buildDial(){
+  const wrap = $('#stations');
+  wrap.innerHTML = '';
+  STORIES.forEach((s,i)=>{
+    const b = document.createElement('button');
+    b.className = 'station' + (i===idx?' on':'');
+    b.innerHTML = `<span class="num">${String(s.sort||i+1).padStart(2,'0')}</span>
+                   <span class="cat">${(s.categoryName||'').replace(/^[^\s]+\s/,'').slice(0,4)}</span>
+                   <span class="tick"></span>`;
+    b.onclick = ()=>select(i,true);
+    wrap.appendChild(b);
+  });
+}
+function moveNeedle(){
+  const st = document.querySelectorAll('.station');
+  const n = st[idx], dial = $('#dial');
+  if(!n) return;
+  const r = n.getBoundingClientRect(), dr = dial.getBoundingClientRect();
+  $('#needle').style.left = (r.left - dr.left + r.width/2) + 'px';
+}
+
+/* ---------- 選台 ---------- */
+function select(i, withNoise){
+  if(withNoise) noiseBurst();
+  idx = (i + STORIES.length) % STORIES.length;
+  const s = STORIES[idx];
+  document.querySelectorAll('.station').forEach((el,k)=>el.classList.toggle('on', k===idx));
+  moveNeedle();
+
+  $('#chanNo').textContent = '#' + String(s.sort||idx+1).padStart(2,'0');
+  $('#catName').textContent = s.categoryName || '';
+  $('#stTitle').textContent = s.title || '';
+  $('#stExcerpt').textContent = s.excerpt || '';
+
+  $('#storyCol').innerHTML = `
+    <div class="layer" data-i="0"><span class="tag">第 一 段・故事的起頭</span><br>${s.layer1||''}</div>
+    <div class="layer" data-i="1"><span class="tag">第 二 段・故事的轉彎</span><br>${s.layer2||''}</div>
+    ${s.hasProduct ? `<div class="layer" data-i="2"><span class="tag">第 三 段・工商服務</span><br>${s.layer3||''}</div>` : ''}
+    <div class="scripture">${s.scripture||''}</div>`;
+
+  renderAd(s);
+  loadAudio(s);
+  syncButtons();
+}
+
+function renderAd(s){
+  const col = $('#adCol');
+  if(s.hasProduct && s.product){
+    const p = s.product;
+    col.innerHTML = `
+      <div class="ad-card">
+        <div class="stamp">今天<br>有貨</div>
+        <div class="ad-label">工 商 服 務 時 間</div>
+        <h3 class="ad-title">${p.title||''}</h3>
+        <div style="font-size:.78rem;color:#6b4a28;letter-spacing:.06em">${p.tag||''}</div>
+        <div class="price">${p.price||''}</div>
+        <ul class="feats">${(p.features||[]).map(f=>`<li>${f}</li>`).join('')}</ul>
+        <a class="buy" href="#" onclick="return false;">💬 加 LINE 好友・用 LINE Pay 帶回家</a>
+        <p class="buy-note">打樣頁不導購，正式站接 LINE 官方帳號</p>
+      </div>`;
+  }else{
+    col.innerHTML = `
+      <div class="pray-card">
+        <h3>🙏 這一集，先送祝福</h3>
+        <p>這一篇沒有要賣東西。你可以留一句話，或加 LINE 好友，新故事上架時，我們用電台通知你。</p>
+        <a class="buy" href="#" onclick="return false;">💬 加 LINE 好友・免費收聽新故事</a>
+        <p class="buy-note">打樣頁不導購</p>
+      </div>`;
+  }
+}
+
+/* ---------- 音檔 ---------- */
+function loadAudio(s){
+  audio.pause();
+  const src = s.mp3File || '';
+  audio = new Audio();
+  audio.src = src;
+  audio.onloadedmetadata = ()=>{ updateTime(); };
+  audio.ontimeupdate = updateTime;
+  audio.onended = ()=>{ document.body.classList.remove('playing'); $('#goBtn').textContent='▶'; if($('#autoNext').checked) select(idx+1,true); };
+  audio.onerror = ()=>{ $('#timeTxt').textContent = '本集音檔錄製中・可先讀下面文字'; $('#goBtn').style.opacity='.4'; $('#goBtn').style.cursor='not-allowed'; };
+  $('#goBtn').textContent = '▶';
+  $('#goBtn').style.opacity='1'; $('#goBtn').style.cursor='pointer';
+  document.body.classList.remove('playing');
+}
+
+function fmt(t){ if(!isFinite(t)) return '00:00'; const m=Math.floor(t/60), s=Math.floor(t%60); return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'); }
+function updateTime(){ $('#timeTxt').textContent = fmt(audio.currentTime)+' / '+fmt(audio.duration); }
+
+function togglePlay(){
+  if(!audio.src) return;
+  if(audio.paused){ audio.play().catch(()=>{}); document.body.classList.add('playing'); $('#goBtn').textContent='⏸'; spin($('#playBtn')); }
+  else { audio.pause(); document.body.classList.remove('playing'); $('#goBtn').textContent='▶'; }
+}
+function spin(knob){ const f = knob.querySelector('.dial-face'); f.style.transform = 'rotate(' + (Math.random()*220+60) + 'deg)'; }
+
+/* ---------- 逐段朗讀 ---------- */
+function toggleSpeech(){
+  speechOn = !speechOn;
+  if(!speechOn){ speechSynthesis.cancel(); document.querySelectorAll('.layer.speaking').forEach(e=>e.classList.remove('speaking')); return; }
+  speakLayers(0);
+}
+function speakLayers(i){
+  const layers = document.querySelectorAll('#storyCol .layer');
+  if(!speechOn || i>=layers.length) return;
+  document.querySelectorAll('.layer.speaking').forEach(e=>e.classList.remove('speaking'));
+  layers[i].classList.add('speaking');
+  const u = new SpeechSynthesisUtterance(layers[i].innerText);
+  u.lang='zh-TW'; u.rate=0.9;
+  u.onend = ()=> speakLayers(i+1);
+  speechSynthesis.speak(u);
+}
+
+/* ---------- 按鈕 ---------- */
+function syncButtons(){
+  $('#prevBtn').classList.toggle('disabled', idx===0);
+  $('#nextBtn').classList.toggle('disabled', idx===STORIES.length-1);
+}
+$('#prevBtn').onclick = ()=>{ spin($('#prevBtn')); select(idx-1,true); };
+$('#nextBtn').onclick = ()=>{ spin($('#nextBtn')); select(idx+1,true); };
+$('#randBtn').onclick = ()=>{ spin($('#randBtn')); select(Math.floor(Math.random()*STORIES.length),true); };
+$('#playBtn').onclick = togglePlay;
+$('#goBtn').onclick = togglePlay;
+
+/* 波形條 */
+(function(){
+  const w = $('#wave');
+  for(let i=0;i<40;i++){ const b=document.createElement('i'); b.style.height=(12+Math.random()*70)+'%'; w.appendChild(b); }
+  setInterval(()=>{
+    if(!document.body.classList.contains('playing')) return;
+    [...w.children].forEach(b=> b.style.height = (18+Math.random()*78)+'%');
+  }, 130);
+})();
+
+window.addEventListener('resize', moveNeedle);
+window.addEventListener('load', ()=>setTimeout(moveNeedle, 60));
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>setTimeout(moveNeedle, 60));
+buildDial();
+select(4, false);
+setTimeout(moveNeedle, 300);
+</script>
+</body>
+</html>

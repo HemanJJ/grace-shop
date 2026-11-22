@@ -46,3 +46,58 @@
 - GitHub Pages (`hemanjj.github.io`) 的 4 個共享 IP 中，前 3 個（`185.199.108.153`、`109.153`、`110.153`）常被台灣家用路由器（`192.168.0.1` 防毒牆）強制重設連線，僅第 4 個 `185.199.111.153` 正常通行。
 - **本機開發/展示**：優先使用 `http://127.0.0.1:8920/`（0.01 秒秒開），或於 `/etc/hosts` 綁定 `185.199.111.153 hemanjj.github.io`。
 - **對外印製商用 QR Code**：建議同步掛載至 Cloudflare Pages（`*.pages.dev`）或綁定自有網域，確保全台灣長輩手機 Wi-Fi 100% 不撞牆。
+
+
+---
+
+## 四、2026-11 改版：手機優先「刷屏」版（現行主線）
+
+**線上網址**：https://grace-shop-radio.netlify.app （Netlify 專案 `grace-shop-radio`／site id `737821c5-4669-4c7c-bf4d-56f34eed031c`）
+
+| 檔案 | 用途 |
+| :--- | :--- |
+| `mobile.html` | **手機優先主站**（已部署為 `/`）：頂部迷你收音機條＋10 格主題刻盤、故事流（15 秒試聽、標籤篩選、分批載入 20 篇）、故事內頁（三段＋行內帶貨＋自動連播）、好物館（分類格狀）、商品頁反向掛故事 |
+| `products.json` | **商品表（獨立）**：`id(P001)`、`category`、`title`、`priceNum`、`unit`、`img`、`features`、`storyIds[]`、`active` |
+| `stories.json` | 故事表，新增 `productIds[]` 與商品互掛（一篇可掛 0–3 個） |
+| `demo_radio.html` | 桌機古早收音機版（部署為 `/desktop.html`） |
+| `index.html` | 最早的打樣 A 版（部署為 `/original-a.html`） |
+| `tts/build_radio.py` | 10 集電台版音檔產生器（edge-tts zh-TW，可整批重出） |
+
+**深連結**：`/#/story/<故事id>`、`/#/product/<商品id>`、`/#/shop`（QR Code 直接指向單篇故事用）
+
+**音檔**：`mp3/ep01.mp3`～`ep10.mp3`（ASCII 檔名，避免 CDN 亂碼）
+
+**擴充規則**：故事 `#001–#999`、商品 `P001–P999`；故事流與好物館是兩個入口，靠 `productIds` / `storyIds` 互掛，不要合併成一對一。
+
+**長輩可用性標準（實測值，390px 寬手機）**
+
+| 元件 | 改前 | 改後 |
+| :--- | :--- | :--- |
+| 篩選標籤 chip | 72×38 | 82×48 |
+| 15 秒試聽鈕 | 98×34 | 122×48 |
+| 故事頁播放鈕 | 44×44 | 58×58 |
+| 返回鈕 | 32×32 | 46×46 |
+| 底部 tab | 49 高 | 59 高 |
+| 卡片標題／摘要 | 15.5／11.8px | 17.9／15px |
+| 故事內文 | 16px | 18.4px |
+
+規則：可點元素 ≥ 48px（次要 ≥ 44）、內文 ≥ 15px、故事正文 ≥ 18px、圖示旁一律有文字。
+刻盤 10 格在 390px 上限只有 36px 寬（10 格均分），所以「選台」主力是下面那排 48px 標籤，刻盤降為指針顯示。
+
+---
+
+## 五、正式配音改走本機 Qwen3-TTS（2026-11-10）
+
+**為什麼換**：原本十集是 `edge-tts`（微軟 Edge 線上朗讀，`zh-TW-YunJheNeural`）產生的打樣音，不能固定主持人、不能調語氣與停頓，商用授權也不明確。正式版改用使用者自己的本機模型。
+
+| 項目 | 內容 |
+| :--- | :--- |
+| 模型 | Qwen3-TTS 1.7B，在 `~/Documents/Codex/2026-10-29/users-defi-ai-md-users-defi-3/work/tts_qwen/models/` |
+| 控制台 | `work/tts_console/server.py`，`http://127.0.0.1:8766` |
+| **啟動方式（重要）** | 必須用 venv 的 python：`./work/tts_qwen/bin/python3 work/tts_console/server.py --port 8766`。用系統 `python3` 會缺 `mlx_audio` 而失敗。 |
+| 產聲設定 | 單人模式 · 旁白 · `uncle_fu` · 年齡 50 · 語氣「低沉厚實、沉穩、語速偏慢、溫暖可信，像老電台主持人」 · 語速 0.88 · 講者停頓 700ms · 段落停頓 800ms |
+| 輸出規格 | 192 kbps／44.1 kHz／立體聲 MP3 |
+| 批次腳本 | `tts/qwen_batch.py --ep all`（或單集 `--ep 05`），產出 `mp3/epNN.mp3` |
+| 播稿來源 | `tts/播稿/ep01–ep10.txt`（空白行＝段落停頓） |
+
+**edge-tts 產物**保留在 `mp3/_edge打樣/` 僅供對照，不再上線。

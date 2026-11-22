@@ -1,0 +1,28 @@
+<!doctype html><meta charset=utf-8><body style="margin:0">
+<pre id="out" style="font:12px monospace"></pre>
+<iframe id="f" src="/mobile.html#/story/couple-love" style="width:390px;height:844px;border:0"></iframe>
+<script>
+const f=document.getElementById('f');
+f.onload=()=>setTimeout(()=>{
+  const d=f.contentDocument, w=f.contentWindow;
+  const rows=[];
+  const sel=['.minidial button','.chip','.playbtn','.goods','.card','.tabbar .tab','.audiorow .big','.page .head .back','.aabtn','.inline .go','.pcard'];
+  sel.forEach(s=>{
+    const els=[...d.querySelectorAll(s)];
+    if(!els.length){rows.push(s+' — 不存在');return;}
+    const r=els[0].getBoundingClientRect();
+    rows.push(s.padEnd(22)+' '+Math.round(r.width)+' x '+Math.round(r.height)+' px');
+  });
+  rows.push('--- 字級 ---');
+  [['body',d.body]].forEach(([n,e])=>{
+    rows.push(n+' '+w.getComputedStyle(e).fontSize);
+  });
+  ['.card h3','.card p','.layer','.chip'].forEach(s=>{
+    const e=d.querySelector(s); if(e) rows.push(s+' '+w.getComputedStyle(e).fontSize);
+  });
+  rows.push('--- 水平溢出 ---');
+  rows.push('scrollWidth '+d.documentElement.scrollWidth+' / client '+d.documentElement.clientWidth);
+  document.getElementById('out').textContent = rows.join('\n');
+  document.title='AUDIT_DONE';
+},2500);
+</script>

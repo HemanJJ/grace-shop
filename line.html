@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<meta name="msapplication-TileColor" content="#2a1710">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>購物小助理｜光碼電台・歲月恩典館</title>
+<meta name="theme-color" content="#2a1710">
+<meta property="og:title" content="購物小助理｜光碼電台">
+<meta property="og:description" content="加入好友，新故事上架第一個通知你。想找什麼、想送誰，交給小助理。">
+<meta property="og:image" content="https://grace-coffee.pages.dev/images/og/1.png">
+<style>
+:root{--brass:#c9a227;--cam:#f6ecdc;--ink:#2b1a0e;--line:#06C755}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; color:var(--cam);
+  font-family:"Noto Sans TC","PingFang TC",system-ui,sans-serif;
+  background-color:#1b1008; background-image:url("./images/wood_tile.jpg");
+  background-size:380px auto; background-repeat:repeat;
+  display:flex; align-items:center; justify-content:center; padding:24px 18px 40px;
+}
+body::before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55));pointer-events:none}
+.card{
+  position:relative; z-index:1; width:100%; max-width:380px; text-align:center;
+  background:linear-gradient(180deg,#fdf7e9,#f2e5cb); color:var(--ink);
+  border-radius:18px; padding:28px 22px 24px;
+  border:2px solid var(--brass);
+  box-shadow:0 18px 40px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.avatar{
+  width:96px;height:96px;margin:0 auto 14px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#8fe0a6,#06C755 55%,#046f2f);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px rgba(6,199,85,.35), inset 0 -6px 14px rgba(0,0,0,.25);
+}
+.avatar svg{width:54px;height:54px}
+h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:1.5rem;margin:0 0 6px;letter-spacing:.06em}
+.sub{color:#6b4a28;font-size:.92rem;line-height:1.7;margin:0 0 18px}
+ul{list-style:none;padding:0;margin:0 0 20px;text-align:left}
+li{
+  display:flex;gap:10px;align-items:flex-start;font-size:.95rem;line-height:1.6;
+  padding:10px 0;border-bottom:1px dashed rgba(120,84,40,.28);color:#3d2a16;
+}
+li:last-child{border-bottom:0}
+li .n{
+  flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:#b23a2b;color:#fff6e6;
+  font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+  background:var(--line);color:#03310f;text-decoration:none;font-weight:900;
+  font-family:"Noto Serif TC",serif;font-size:1.12rem;letter-spacing:.04em;
+  padding:17px;border-radius:12px;box-shadow:0 5px 0 #04873a, 0 12px 24px rgba(0,0,0,.28);
+}
+.btn:active{transform:translateY(2px);box-shadow:0 3px 0 #04873a}
+.note{font-size:.76rem;color:#7d5f3d;margin:14px 0 0;line-height:1.7}
+.qr{margin-top:20px;padding-top:16px;border-top:1px dashed rgba(120,84,40,.3)}
+.qr img{width:150px;height:150px;display:block;margin:0 auto 8px;border-radius:8px;background:#fff;padding:8px}
+.qr p{font-size:.74rem;color:#7d5f3d;margin:0}
+.back{display:inline-block;margin-top:16px;color:#8a6636;font-size:.8rem;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="avatar">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 24h24l-3 24H23L20 24z" fill="#fff" opacity=".95"/>
+      <path d="M26 24v-5a6 6 0 0112 0v5" stroke="#046f2f" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+      <circle cx="28" cy="34" r="2.1" fill="#046f2f"/>
+      <circle cx="36" cy="34" r="2.1" fill="#046f2f"/>
+      <path d="M28.5 40c1.8 1.6 5.2 1.6 7 0" stroke="#046f2f" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <h1>購物小助理</h1>
+  <p class="sub">加入好友，有事直接問。<br>不用註冊、不用填資料。</p>
+
+  <ul>
+    <li><span class="n">1</span><span><b>新故事上架，第一個通知你</b><br>一集一句話，不喜歡可以收回。</span></li>
+    <li><span class="n">2</span><span><b>想找什麼，交給我</b><br>「睡不著的茶」「送爸爸的」直接講，我幫你挑。</span></li>
+    <li><span class="n">3</span><span><b>用 LINE Pay 結帳</b><br>不用填卡號，也不用記帳號密碼。</span></li>
+  </ul>
+
+  <a class="btn" href="https://line.me/ti/p/6JEefKVPSw" target="_blank" rel="noopener">
+    加入購物小助理
+  </a>
+  <p class="note">我們不會亂傳訊息，也不會把你的對話給別人。</p>
+
+  <div class="qr">
+    <img src="./images/qr/line_qr_official.jpg" alt="LINE 加好友 QR" style="padding:0">
+    <p>用另一支手機掃這個碼，一樣可以加</p>
+  </div>
+
+  <a class="back" href="./">← 回去聽故事</a>
+</div>
+</body>
+</html>
