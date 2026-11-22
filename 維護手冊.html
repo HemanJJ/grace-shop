@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>光碼電台・維護手冊</title>
+<style>
+  :root { --ink:#2b2118; --muted:#8a7c6d; --line:#e6ddd2; --accent:#8a5a2b; --ok:#2f6b45; --warn:#a3311d; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:28px 18px 70px; font:16px/1.75 -apple-system,"PingFang TC","Noto Sans TC",sans-serif; background:#f6f1e9; color:var(--ink); }
+  main { max-width:820px; margin:0 auto; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  h2 { font-size:19px; margin:34px 0 10px; padding-top:14px; border-top:1px solid var(--line); }
+  .lead { color:var(--muted); margin-bottom:20px; }
+  .box { background:#fffdf9; border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
+  .box.warn { background:#fdf3f0; border-color:#e8cdc6; }
+  table { width:100%; border-collapse:collapse; background:#fffdf9; margin-top:6px; }
+  th,td { border:1px solid var(--line); padding:9px 10px; text-align:left; font-size:15px; vertical-align:top; }
+  th { background:#f1e8db; }
+  code { background:#efe6d8; padding:1px 6px; border-radius:6px; font-size:14px; }
+  .tag { display:inline-block; font-size:12px; padding:1px 8px; border-radius:999px; border:1px solid var(--line); color:var(--muted); }
+  ol,ul { padding-left:22px; }
+  li { margin:4px 0; }
+  @media print { body { background:#fff; } table,.box { break-inside:avoid; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>光碼電台・維護手冊</h1>
+  <p class="lead">2026-11-22 版。這頁講「平常怎麼用」，不講程式。</p>
+
+  <h2>30 秒版</h2>
+  <div class="box">
+    <p style="margin-top:0"><b>桌面只有一顆要按：🎛 電台工作台。</b><br>
+    雙擊它，會自動叫起本機後台與控音台，再開四個分頁：改東西、錄音、看單、上架。</p>
+    <p style="margin-bottom:0"><b>只有兩組密碼：</b>本機後台 <code>Hjh16789</code>（存在 cms_password.txt）／看單 <code>grace-8be3c6ee</code>（存在 order-api/看單密碼.txt）。</p>
+  </div>
+
+  <h2>五個地方，各管什麼</h2>
+  <table>
+    <tr><th>入口</th><th>網址</th><th>你要在裡面做什麼</th></tr>
+    <tr><td><b>🎛 工作台</b></td><td>桌面雙擊</td><td>一次開齊下面四個，不用記網址</td></tr>
+    <tr><td><b>本機後台</b></td><td>127.0.0.1:8756</td><td>改商品、改故事、按「🚀 發布上線」</td></tr>
+    <tr><td><b>控音台</b></td><td>127.0.0.1:8766</td><td>文字轉語音，產 mp3（Google 台灣中文）</td></tr>
+    <tr><td><b>看單</b></td><td>grace-coffee.pages.dev/orders</td><td>看今天幾筆、收多少、叫貨清單</td></tr>
+    <tr><td><b>上架單</b></td><td>grace-coffee.pages.dev/sheet</td><td>填商品資料＋圖片，複製貼給小李</td></tr>
+  </table>
+
+  <h2>平常會做的四件事</h2>
+
+  <p><b>① 改價錢 / 改商品說明</b></p>
+  <ol>
+    <li>工作台 → 本機後台 → 商品</li>
+    <li>改完存檔</li>
+    <li>按 <b>🚀 發布上線</b>（它會先同步價錢到收單系統，再推網站）</li>
+    <li>到 <code>/orders</code> 下一張測試單，看金額對不對</li>
+  </ol>
+
+  <p><b>② 新增一個商品</b></p>
+  <ol>
+    <li>開 <code>/sheet</code> 填：商品名、三句賣點、售價、進價、階梯</li>
+    <li>選一張圖（表單會自動縮圖上傳，狀態出現「✅ 圖已上傳」才算成功）</li>
+    <li>按複製，貼給小李</li>
+    <li>我建檔 → 同步 → 上線，回你網址</li>
+  </ol>
+
+  <p><b>③ 錄一集新故事</b></p>
+  <ol>
+    <li>控音台：貼上稿子 → 按「生成」</li>
+    <li>下載 mp3 → 放到 `mp3/`（檔名照 `01_篇名_標題.mp3`）</li>
+    <li>本機後台 → 故事 → 填該集 → 發布</li>
+  </ol>
+
+  <p><b>④ 開完團、要叫貨</b></p>
+  <ol>
+    <li>開 <code>/orders</code>，選日期</li>
+    <li>看最下面的「<b>叫貨清單</b>」：每樣商品今天總共幾件</li>
+    <li>照那個數量叫貨（不用再自己加總）</li>
+  </ol>
+
+  <h2>資料放在哪（要備份就抓這幾個）</h2>
+  <table>
+    <tr><th>檔案 / 資料夾</th><th>是什麼</th></tr>
+    <tr><td><code>products.json</code></td><td>商品主檔（含進價、售價、箱入數、圖片路徑）</td></tr>
+    <tr><td><code>tiers.json</code></td><td>量價階梯（滿幾件打幾折）</td></tr>
+    <tr><td><code>stories.json</code></td><td>10 篇故事</td></tr>
+    <tr><td><code>images/</code></td><td>商品圖（檔名用商品編號開頭）</td></tr>
+    <tr><td><code>mp3/</code></td><td>故事語音</td></tr>
+    <tr><td><code>dist/</code></td><td>上線用的整包（不要手改，由後台發布產生）</td></tr>
+    <tr><td>Cloudflare D1</td><td>訂單＋庫存價錢（線上資料庫，透過後台同步）</td></tr>
+  </table>
+
+  <h2>出事怎麼查（照順序）</h2>
+  <table>
+    <tr><th>症狀</th><th>先看這裡</th><th>怎麼解</th></tr>
+    <tr><td>網站開不起來</td><td>grace-coffee.pages.dev</td><td>看是不是自己網路；換手機網路試</td></tr>
+    <tr><td>改完價錢，結帳金額不對</td><td>本機後台 → 發布</td><td>按「🔄 同步價錢到收單系統」再試</td></tr>
+    <tr><td>商品卡沒圖</td><td><code>images/</code></td><td>檔名要跟 products.json 的 img 一致</td></tr>
+    <tr><td>後台發布失敗</td><td>終端機訊息</td><td>多半是 Cloudflare 登入過期，重新授權一次</td></tr>
+    <tr><td>控音台打不開</td><td>工作台</td><td>雙擊工作台，它會自己叫起來</td></tr>
+  </table>
+
+  <h2>三件不要做</h2>
+  <div class="box warn">
+    <ol style="margin:0">
+      <li><b>不要拖曳上傳網站。</b>正式內容在 <code>dist/</code>，拖錯會蓋回舊版。一律用後台「發布」。</li>
+      <li><b>不要把密碼貼進群組。</b>看單密碼等於營收。</li>
+      <li><b>不要同時改兩個系統。</b>這個站（電台）跟 smartlocker（球館）是兩套。</li>
+    </ol>
+  </div>
+
+  <h2>舊的東西在哪</h2>
+  <p>2026-11-22 已把過時的 6 支腳本搬進 <code>_舊腳本/</code>：拖曳部署、繞路由器、開通 GitHub 新站、修復 Chrome、舊後台、舊的 MP3 合成。</p>
+  <p class="lead" style="margin-top:4px">不要點它們。真的要用再搬回來，但先問過我。</p>
+</main>
+</body>
+</html>
