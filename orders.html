@@ -52,6 +52,30 @@ if (saved) $('token').value = saved;
 $('date').value = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
 $('go').onclick = load;
 
+document.addEventListener('change', async (e) => {
+  const sel = e.target.closest('select[data-id]');
+  if (!sel) return;
+  const id = sel.dataset.id;
+  const status = sel.value;
+  sel.disabled = true;
+  try {
+    const r = await fetch(`${API}/api/admin/status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + $('token').value.trim() },
+      body: JSON.stringify({ id, status }),
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.message || '改不動');
+    sel.style.background = '#eaf3ec';
+    setTimeout(() => { sel.style.background = '#fff'; }, 800);
+  } catch (err) {
+    alert('改狀態失敗：' + err.message);
+    sel.value = sel.dataset.prev || sel.value;
+  }
+  sel.disabled = false;
+  sel.dataset.prev = sel.value;
+});
+
 async function load() {
   const token = $('token').value.trim();
   const date = $('date').value;
@@ -66,6 +90,20 @@ async function load() {
   } catch (e) {
     $('out').innerHTML = '<span class="err">' + esc(e.message) + '</span>（密碼錯或網路不通）';
   }
+}
+
+const STATUS = [
+  ['new', '待付款'],
+  ['paid', '已收款'],
+  ['shipped', '已出貨'],
+  ['done', '完成'],
+  ['cancelled', '取消'],
+];
+
+function statusSelect(id, cur) {
+  return '<select data-id="' + esc(id) + '" style="font:inherit;padding:4px 6px;border-radius:8px;border:1px solid #e6ddd2;background:#fff">' +
+    STATUS.map(([k, t]) => `<option value="${k}"${k === cur ? ' selected' : ''}>${t}</option>`).join('') +
+    '</select>';
 }
 
 function render(d) {
@@ -91,10 +129,11 @@ function render(d) {
       <td class="hide">${esc(o.buyer_name || '')}${o.buyer_phone ? '<div class="muted">' + esc(o.buyer_phone) + '</div>' : ''}</td>
       <td>${(o.items || []).map((i) => `${esc(i.name.slice(0, 16))}… ×${i.qty}${i.tier_percent ? '（' + i.tier_percent / 10 + '折）' : ''}`).join('<br>')}</td>
       <td>${o.discount ? '<div class="muted">折扣 −' + money(o.discount) + '</div>' : ''}${money(o.total)}</td>
+      <td>${statusSelect(o.id, o.status)}</td>
     </tr>`).join('');
 
   $('out').innerHTML = cards +
-    (d.count ? `<table><tr><th>訂單</th><th class="hide">客人</th><th>內容</th><th>金額</th></tr>${rows}</table>` : '<div class="muted">這天沒有訂單。</div>') +
+    (d.count ? `<table><tr><th>訂單</th><th class="hide">客人</th><th>內容</th><th>金額</th><th>狀態</th></tr>${rows}</table>` : '<div class="muted">這天沒有訂單。</div>') +
     need;
 }
 </script>

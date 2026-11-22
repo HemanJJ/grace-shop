@@ -244,7 +244,8 @@
       '小計：' + H.money(sub) + '\n' +
       (disc ? '階梯折扣：−' + H.money(disc) + '\n' : '') +
       '運費：' + (ship ? H.money(ship) : '免運') + '\n' +
-      '應付：' + H.money(total) + '\n\n' +
+      '應付：' + H.money(total) + '\n' +
+      '查進度：grace-coffee.pages.dev/track\n\n' +
       (server
         ? '（已收單，這份可傳給小編對帳）'
         : '（尚未入庫！請把這份訂單傳給小編，我們會回覆匯款或 LINE Pay 資訊）');

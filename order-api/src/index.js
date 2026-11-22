@@ -134,8 +134,7 @@ async function createOrder(req, env, cors) {
   const total = net + shipping;
 
   const t = taipeiParts();
-  const rand = String(Math.floor(Math.random() * 90) + 10);
-  const orderId = `GC${t.ymd}-${t.hms}${rand}`;
+  const orderId = `GC${t.ymd}-${randomCode(6)}`;
 
   const buyerName = String(body.buyer_name || '').slice(0, 40);
   const buyerPhone = String(body.buyer_phone || '').replace(/[^\d+\-() ]/g, '').slice(0, 20);
@@ -278,6 +277,21 @@ async function syncCatalog(req, env, url, cors) {
   return json({ ok: true, products: ids.length, tiers: tierCount, at: now }, cors);
 }
 
+const STATUS_LABEL = {
+  new: '待付款',
+  paid: '已收款',
+  shipped: '已出貨',
+  done: '完成',
+  cancelled: '取消',
+};
+
+function randomCode(n) {
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const buf = new Uint8Array(n);
+  crypto.getRandomValues(buf);
+  return [...buf].map((b) => alphabet[b % alphabet.length]).join('');
+}
+
 function b64ToBytes(b64) {
   const bin = atob(b64);
   const out = new Uint8Array(bin.length);
@@ -320,6 +334,40 @@ async function serveImage(id, env) {
   });
 }
 
+/** 改訂單狀態（只有拿得到看單密碼的人能改） */
+async function setOrderStatus(req, env, url, cors) {
+  requireToken(req, env, url);
+  const body = await req.json().catch(() => { throw new HttpError(400, 'bad_json'); });
+  const id = String(body.id || '').trim().toUpperCase();
+  const status = String(body.status || '').trim();
+  if (!/^GC[A-Za-z0-9-]{4,32}$/.test(id)) throw new HttpError(400, 'bad_id', '訂單編號不正確');
+  if (!STATUS_LABEL[status]) throw new HttpError(400, 'bad_status', '不認得的狀態');
+
+  const r = await env.DB.prepare('UPDATE orders SET status = ? WHERE id = ?').bind(status, id).run();
+  if (!r.meta || r.meta.changes === 0) throw new HttpError(404, 'not_found', '找不到這張單');
+  return json({ ok: true, id, status, label: STATUS_LABEL[status] }, cors);
+}
+
+/** 客人查單：只要訂單編號，回傳進度與明細（不含姓名電話） */
+async function trackOrder(req, env, url, cors) {
+  const no = String(url.searchParams.get('no') || '').trim().toUpperCase();
+  if (!no) throw new HttpError(400, 'no_number', '請輸入訂單編號');
+
+  const row = await env.DB.prepare(
+    'SELECT id, created_at, status, subtotal, discount, shipping, total FROM orders WHERE id = ?'
+  ).bind(no).first();
+  if (!row) throw new HttpError(404, 'not_found', '查不到這個編號，確認有沒有打錯');
+
+  const { results: items } = await env.DB.prepare(
+    'SELECT name, qty, unit_price, amount FROM order_items WHERE order_id = ?'
+  ).bind(no).all();
+
+  return json({
+    ok: true,
+    order: { ...row, status_label: STATUS_LABEL[row.status] || row.status, items },
+  }, cors);
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -331,6 +379,8 @@ export default {
       if (url.pathname === '/api/orders' && req.method === 'POST') return await createOrder(req, env, cors);
       if (url.pathname === '/api/orders' && req.method === 'GET') return await listOrders(req, env, url, cors);
       if (url.pathname === '/api/admin/sync' && req.method === 'POST') return await syncCatalog(req, env, url, cors);
+      if (url.pathname === '/api/admin/status' && req.method === 'POST') return await setOrderStatus(req, env, url, cors);
+      if (url.pathname === '/api/track' && req.method === 'GET') return await trackOrder(req, env, url, cors);
       if (url.pathname === '/api/upload' && req.method === 'POST') return await uploadImage(req, env, url.origin, cors);
       if (url.pathname.startsWith('/api/img/') && req.method === 'GET') {
         return await serveImage(url.pathname.slice('/api/img/'.length), env);
