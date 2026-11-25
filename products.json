@@ -19,7 +19,8 @@
     ],
     "active": true,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 1
   },
   {
     "id": "P002",
@@ -41,7 +42,8 @@
     ],
     "active": false,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 2
   },
   {
     "id": "P003",
@@ -63,7 +65,8 @@
     ],
     "active": true,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 3
   },
   {
     "id": "P004",
@@ -85,7 +88,8 @@
     ],
     "active": false,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 4
   },
   {
     "id": "P005",
@@ -108,7 +112,8 @@
     ],
     "active": true,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 5
   },
   {
     "id": "P006",
@@ -131,7 +136,8 @@
     ],
     "active": true,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 6
   },
   {
     "id": "P007",
@@ -153,7 +159,8 @@
     ],
     "active": false,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 7
   },
   {
     "id": "P008",
@@ -175,7 +182,8 @@
     ],
     "active": true,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 8
   },
   {
     "id": "P009",
@@ -198,7 +206,8 @@
     ],
     "active": true,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 9
   },
   {
     "id": "P010",
@@ -221,7 +230,8 @@
     ],
     "active": true,
     "cost": null,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 10
   },
   {
     "id": "P011",
@@ -242,7 +252,8 @@
     ],
     "active": true,
     "cost": 500,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 11
   },
   {
     "id": "P012",
@@ -263,6 +274,29 @@
     ],
     "active": true,
     "cost": 500,
-    "boxQty": null
+    "boxQty": null,
+    "sort": 12
+  },
+  {
+    "id": "P013",
+    "storyIds": [],
+    "category": "蜂蜜",
+    "tag": "🍯 一支湯匙裡的整座山",
+    "title": "【小蜜蜂的陽光】台灣龍眼蜜・咸豐草蜜",
+    "price": "NT$ 600 / 瓶",
+    "priceNum": 600,
+    "unit": "瓶",
+    "img": "./images/honey-longan.jpg",
+    "desc": "小蜜蜂每天清晨飛出蜂巢，不貪心，只採一點點花蜜。牠飛過龍眼花，也飛過咸豐草花，把陽光的香氣帶回蜂巢，跟朋友們一起慢慢釀。",
+    "features": [
+      "龍眼蜜與咸豐草蜜分開採收，香氣有層次：一杯是果香，一杯是草香",
+      "每一瓶都有 QR 碼，掃一下就知道來自哪一座山、哪一片花田",
+      "結晶是自然現象，隔水溫熱就會回復；挖一匙配溫水或吐司都好",
+      "一歲以下嬰兒不宜食用（蜂蜜製品，請勿餵食嬰幼兒）"
+    ],
+    "active": true,
+    "cost": null,
+    "boxQty": null,
+    "sort": 13
   }
 ]

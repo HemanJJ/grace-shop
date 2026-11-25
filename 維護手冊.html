@@ -32,25 +32,27 @@
   <h2>30 秒版</h2>
   <div class="box">
     <p style="margin-top:0"><b>桌面只有一顆要按：🎛 電台工作台。</b><br>
-    雙擊它，會自動叫起本機後台與控音台，再開四個分頁：改東西、錄音、看單、上架。</p>
-    <p style="margin-bottom:0"><b>只有兩組密碼，就是下面這兩組。</b></p>
+    雙擊它，會叫起<b>兩個後台</b>與控音台：<b>故事電台後台（:8756）</b>管故事與商品、<b>三創女子後台（:8795）</b>管會員名錄；再開四個分頁：改東西、錄音、看單、上架。</p>
+    <p style="margin-bottom:0"><b>只有三組密碼，就是下面這三組。</b></p>
   </div>
 
-  <h2>兩組密碼（就這兩組）</h2>
+  <h2>三組密碼（就這三組）</h2>
   <table>
     <tr><th>用在哪</th><th>帳號</th><th>密碼</th><th>存在哪個檔</th></tr>
-    <tr><td><b>本機後台</b>（127.0.0.1:8756）</td><td>不用帳號</td><td style="font-size:20px"><code>Hjh16789</code></td><td><code>cms_password.txt</code></td></tr>
+    <tr><td><b>故事電台後台</b>（127.0.0.1:8756）</td><td>不用帳號</td><td style="font-size:20px"><code>Hjh16789</code></td><td><code>DEMO_light_shop/cms_password.txt</code></td></tr>
+    <tr><td><b>三創女子後台</b>（127.0.0.1:8795）</td><td>不用帳號</td><td>（見右欄檔案）</td><td><code>business-card-coffee/v3/cms_password.txt</code></td></tr>
     <tr><td><b>看單</b>（/orders）</td><td>不用帳號</td><td style="font-size:20px"><code>grace-8be3c6ee</code></td><td><code>order-api/看單密碼.txt</code></td></tr>
     <tr><td>上架單（/sheet）</td><td colspan="3">不用密碼（公開頁，只收填寫，看不到訂單）</td></tr>
     <tr><td>控音台（127.0.0.1:8766）</td><td colspan="3">不用密碼（只在你這台電腦）</td></tr>
   </table>
-  <p class="lead" style="margin-top:6px">這兩組只在你電腦的檔案裡，網站上看不到。要改密碼就改那兩個檔，然後重開工作台。</p>
+  <p class="lead" style="margin-top:6px">這三組只在你電腦的檔案裡，網站上看不到。要改密碼就改對應的檔，然後重開後台。</p>
 
-  <h2>五個地方，各管什麼</h2>
+  <h2>六個地方，各管什麼</h2>
   <table>
     <tr><th>入口</th><th>網址</th><th>你要在裡面做什麼</th></tr>
     <tr><td><b>🎛 工作台</b></td><td>桌面雙擊</td><td>一次開齊下面四個，不用記網址</td></tr>
-    <tr><td><b>本機後台</b></td><td>127.0.0.1:8756</td><td>改商品、改故事、按「🚀 發布上線」</td></tr>
+    <tr><td><b>故事電台後台</b></td><td>127.0.0.1:8756</td><td>改商品、改故事、按「🚀 發布上線」（歲月恩典館）</td></tr>
+    <tr><td><b>三創女子後台</b></td><td>127.0.0.1:8795<b>/admin</b></td><td>管三創女子商務網的會員名錄</td></tr>
     <tr><td><b>控音台</b></td><td>127.0.0.1:8766</td><td>文字轉語音，產 mp3（Google 台灣中文）</td></tr>
     <tr><td><b>看單</b></td><td>grace-coffee.pages.dev/orders</td><td>看今天幾筆、收多少、叫貨清單</td></tr>
     <tr><td><b>上架單</b></td><td>grace-coffee.pages.dev/sheet</td><td>填商品資料＋圖片，複製貼給小李</td></tr>
@@ -60,7 +62,7 @@
 
   <p><b>① 改價錢 / 改商品說明</b></p>
   <ol>
-    <li>工作台 → 本機後台 → 商品</li>
+    <li>工作台 → 故事電台後台 → 商品</li>
     <li>改完存檔</li>
     <li>按 <b>🚀 發布上線</b>（它會先同步價錢到收單系統，再推網站）</li>
     <li>到 <code>/orders</code> 下一張測試單，看金額對不對</li>
@@ -78,7 +80,7 @@
   <ol>
     <li>控音台：貼上稿子 → 按「生成」</li>
     <li>下載 mp3 → 放到 `mp3/`（檔名照 `01_篇名_標題.mp3`）</li>
-    <li>本機後台 → 故事 → 填該集 → 發布</li>
+    <li>故事電台後台 → 故事 → 填該集 → 發布</li>
   </ol>
 
   <p><b>④ 開完團、要叫貨</b></p>
@@ -104,7 +106,7 @@
   <table>
     <tr><th>症狀</th><th>先看這裡</th><th>怎麼解</th></tr>
     <tr><td>網站開不起來</td><td>grace-coffee.pages.dev</td><td>看是不是自己網路；換手機網路試</td></tr>
-    <tr><td>改完價錢，結帳金額不對</td><td>本機後台 → 發布</td><td>按「🔄 同步價錢到收單系統」再試</td></tr>
+    <tr><td>改完價錢，結帳金額不對</td><td>故事電台後台 → 發布</td><td>按「🔄 同步價錢到收單系統」再試</td></tr>
     <tr><td>商品卡沒圖</td><td><code>images/</code></td><td>檔名要跟 products.json 的 img 一致</td></tr>
     <tr><td>後台發布失敗</td><td>終端機訊息</td><td>多半是 Cloudflare 登入過期，重新授權一次</td></tr>
     <tr><td>控音台打不開</td><td>工作台</td><td>雙擊工作台，它會自己叫起來</td></tr>

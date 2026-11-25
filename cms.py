@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-歲月恩典館・本機維護後台（CMS）
+故事電台・本機維護後台（歲月恩典館 CMS）
 =================================
 - 只有你能改：一組密碼，存在 cms_password.txt
 - 管兩個檔案：stories.json（故事）、products.json（商品）
@@ -258,6 +258,32 @@ class Handler(SimpleHTTPRequestHandler):
             self._json({"error": "type 要 story 或 product"}, 400)
             return
 
+        if p == "/api/reorder":
+            kind = body.get("type")
+            ids = [str(i) for i in (body.get("ids") or [])]
+            f = STORIES if kind == "story" else PRODUCTS if kind == "product" else None
+            if not f:
+                self._json({"error": "type 要 story 或 product"}, 400)
+                return
+            data = read_json(f, [])
+            before = len(data)
+            pos = {x: n for n, x in enumerate(ids)}
+            data.sort(key=lambda x: pos.get(str(x.get("id")), 9999))
+            if len(data) != before:          # 保險：排序不該改變筆數
+                self._json({"ok": False, "error": "筆數異常，已中止（未寫檔）"}, 500)
+                return
+            # 寫檔前留一份，出事可以還原
+            try:
+                (f.parent / (f.name + ".bak-last")).write_text(
+                    f.read_text(encoding="utf-8"), encoding="utf-8")
+            except Exception:
+                pass
+            for n, x in enumerate(data, 1):
+                x["sort"] = n
+            write_json(f, data)
+            self._json({"ok": True, "count": len(data)})
+            return
+
         if p == "/api/delete":
             kind, ident = body.get("type"), body.get("id")
             f = STORIES if kind == "story" else PRODUCTS
@@ -292,7 +318,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 LOGIN_HTML = """<!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>登入｜歲月恩典館後台</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>登入｜故事電台後台（歲月恩典館）</title>
 <style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;
 background:#14110d;color:#f3ead9;font-family:"PingFang TC",sans-serif}
 .box{background:#1d1812;border:1px solid #3a3022;border-radius:14px;padding:26px;width:300px}
@@ -300,7 +326,7 @@ h1{font-size:1.05rem;margin:0 0 16px}input{width:100%;padding:11px;border-radius
 background:#0f0c09;color:#fff;font-size:1rem;box-sizing:border-box}
 button{width:100%;margin-top:14px;padding:12px;border:0;border-radius:9px;background:#c9a227;color:#231a09;
 font-weight:800;font-size:1rem;cursor:pointer}.err{color:#f0a5a5;font-size:.85rem;margin-top:10px}</style></head>
-<body><div class="box"><h1>🧾 歲月恩典館・後台</h1>
+<body><div class="box"><h1>🎙 故事電台・後台（歲月恩典館）</h1>
 <input id="pw" type="password" placeholder="密碼" autofocus>
 <button onclick="go()">登入</button><div class="err" id="err"></div></div>
 <script>async function go(){const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},
